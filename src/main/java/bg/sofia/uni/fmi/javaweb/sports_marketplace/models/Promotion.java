@@ -8,6 +8,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +18,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "promotion")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Promotion {
 
     @Id
