@@ -1,7 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.purchase_item;
 
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductSummaryDto;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.PurchaseItem;
 
 import java.math.BigDecimal;
 

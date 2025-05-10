@@ -30,10 +30,7 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user")
-    private List<Order> orders;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Cart cart;
+    private List<Purchase> orders;
 
     @OneToMany(mappedBy = "user")
     private List<Address> addresses;

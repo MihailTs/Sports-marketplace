@@ -31,11 +31,4 @@ public class Purchase {
     private LocalDateTime purchaseDate;
     private String status;
     private BigDecimal totalAmount;
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
-
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
-    private List<PurchaseItem> purchaseItems;
 }
