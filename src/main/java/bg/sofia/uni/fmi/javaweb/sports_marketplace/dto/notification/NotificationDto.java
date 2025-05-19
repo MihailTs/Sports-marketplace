@@ -11,7 +11,7 @@ public record NotificationDto(
         Boolean isRead,
         LocalDateTime createdAt
 ) {
-    public static NotificationDto fromEntity(Notification notification) {
+    /*public static NotificationDto fromEntity(Notification notification) {
         return new NotificationDto(
                 notification.getId(),
                 notification.getType(),
@@ -19,5 +19,5 @@ public record NotificationDto(
                 notification.getIsRead(),
                 notification.getCreatedAt()
         );
-    }
+    }*/
 }

@@ -31,10 +31,7 @@ public class Product {
     private Integer stockQuantity;
     private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviews;
+    //@ManyToOne
+    //@JoinColumn(name = "category_id")
+    //private Category category;
 }

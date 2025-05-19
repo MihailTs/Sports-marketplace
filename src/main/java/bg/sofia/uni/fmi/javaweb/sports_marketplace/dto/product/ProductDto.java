@@ -16,7 +16,7 @@ public record ProductDto(
         CategoryDto category,
         Double averageRating
 ) {
-    public static ProductDto fromEntity(Product product) {
+    /*public static ProductDto fromEntity(Product product) {
         // Calculate average rating from reviews
         Double avgRating = product.getReviews() != null && !product.getReviews().isEmpty() ?
                 product.getReviews().stream()
@@ -34,5 +34,5 @@ public record ProductDto(
                 product.getCategory() != null ? CategoryDto.fromEntity(product.getCategory()) : null,
                 avgRating
         );
-    }
+    }*/
 }

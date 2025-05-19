@@ -12,7 +12,7 @@ public record ReviewDto(
         LocalDateTime reviewDate,
         UserDto user
 ) {
-    public static ReviewDto fromEntity(Review review) {
+    /*public static ReviewDto fromEntity(Review review) {
         return new ReviewDto(
                 review.getId(),
                 review.getRating(),
@@ -20,5 +20,5 @@ public record ReviewDto(
                 review.getReviewDate(),
                 review.getUser() != null ? UserDto.fromEntity(review.getUser()) : null
         );
-    }
+    }*/
 }

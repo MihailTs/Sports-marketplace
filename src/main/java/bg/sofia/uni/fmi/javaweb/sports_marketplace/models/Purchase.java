@@ -31,4 +31,5 @@ public class Purchase {
     private LocalDateTime purchaseDate;
     private String status;
     private BigDecimal totalAmount;
-}
+
+    }

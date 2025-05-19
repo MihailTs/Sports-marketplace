@@ -7,11 +7,11 @@ public record CategoryDto(
         String name,
         String description
 ) {
-    public static CategoryDto fromEntity(Category category) {
+    /*public static CategoryDto fromEntity(Category category) {
         return new CategoryDto(
                 category.getId(),
                 category.getName(),
                 category.getDescription()
         );
-    }
+    }*/
 }
