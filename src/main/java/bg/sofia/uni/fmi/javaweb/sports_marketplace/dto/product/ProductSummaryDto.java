@@ -12,7 +12,7 @@ public record ProductSummaryDto(
         String imageUrl,
         Double averageRating
 ) {
-    public static ProductSummaryDto fromEntity(Product product) {
+   /* public static ProductSummaryDto fromEntity(Product product) {
         // Calculate average rating from reviews
         Double avgRating = product.getReviews() != null && !product.getReviews().isEmpty() ?
                 product.getReviews().stream()
@@ -28,4 +28,5 @@ public record ProductSummaryDto(
                 avgRating
         );
     }
+    */
 }

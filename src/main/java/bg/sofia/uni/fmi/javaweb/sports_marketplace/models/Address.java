@@ -1,18 +1,10 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "address")
@@ -24,17 +16,37 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     private String street;
+    @Getter
+    @Setter
     private String city;
+    @Getter
+    @Setter
     private String state;
+    @Getter
+    @Setter
     private String zipCode;
+    @Getter
+    @Setter
     private String country;
-    private Boolean isDefault;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> user;
 
-    @OneToMany(mappedBy = "shippingAddress")
-    private List<Order> orders;
+    @Override
+    public boolean equals(Object o){
+        if(this==o) return true;
+        if(o==null||getClass()!=o.getClass()) return false;
+
+        Address address=(Address) o;
+        return Objects.equals(id, address.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }
