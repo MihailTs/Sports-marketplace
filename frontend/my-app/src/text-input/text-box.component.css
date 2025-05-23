@@ -1,0 +1,26 @@
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+  font-size: large;
+  color: #2a313d; /* Gray-700 */
+}
+
+.text-input {
+  padding: 0.6rem 1rem;
+  border: 1px solid #d1d5db; /* Gray-300 */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #2563eb; /* Blue-600 */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
