@@ -3,6 +3,7 @@ package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,10 @@ public class User {
     private String email;
     @Setter
     @Getter
-    private String name;
+    private String firstName;
+    @Setter
+    @Getter
+    private String lastName;
     @Setter
     @Getter
     private String password;
@@ -30,7 +34,7 @@ public class User {
     private String role;
     @Getter
     @Setter
-    private Date birthDate;
+    private LocalDate birthDate;
     @Getter
     @Setter
     private String phoneNumber;
@@ -38,11 +42,14 @@ public class User {
     @Setter
     private String gender;
 
-    public User(String email, String name, String password, String role){
+    public User(String email, String password, String firstName, String lastName, LocalDate birthDate, String phoneNumber, String gender, String role){
         this.email=email;
-        this.name=name;
+        this.firstName=firstName;
+        this.lastName=lastName;
         this.password=password;
         this.role=role;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
     }
 
     //@OneToMany(mappedBy = "user")

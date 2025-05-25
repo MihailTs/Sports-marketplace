@@ -28,11 +28,11 @@ public class Message {
     private Long id;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="id")
+    @JoinColumn(name="chat_id")
     private Chat chat;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id")
+    @JoinColumn(name="sender_id")
     private User senderId;
     private String content;
     private LocalDateTime sendAt;
