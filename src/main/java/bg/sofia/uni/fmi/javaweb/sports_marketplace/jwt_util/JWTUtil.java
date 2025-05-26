@@ -27,10 +27,11 @@ public class JWTUtil {
     }
 
 
-    public String generateToken(String username, Long id){
+    public String generateToken(User user){
         return Jwts.builder()
-                .setSubject(username)
-                .claim("id", id)
+                .setSubject(user.getEmail())
+                .claim("id", user.getId())
+                .claim("role", user.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+100*60*60*10))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -46,8 +47,13 @@ public class JWTUtil {
                 .getSubject();
     }
 
+
     public boolean isTokenValid(String token, UserDetails user) {
-        return extractEmail(token).equals(user.getUsername())&&!isExpired(token);
+        try {
+            return extractEmail(token).equals(user.getUsername())&&!isExpired(token);
+        }catch (JwtException e){
+            return false;
+        }
            /* try {
                 Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
                 return true;
