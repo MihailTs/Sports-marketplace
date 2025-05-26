@@ -27,11 +27,6 @@ The Sports Equipment Marketplace is a web application designed to connect sports
 - **Recommendation Engine**: Suggests relevant equipment based on user preferences and history
 - **Featured Listings**: Highlight premium or urgent sales
 
-### Transaction Support
-- **Secure Payments**: Integrated payment processing with buyer protection
-- **In-app Messaging**: Direct communication between buyers and sellers
-- **Transaction Tracking**: Status updates throughout the purchase process
-
 ### Trust & Safety
 - **Verification System**: Optional ID verification for sellers
 - **Review System**: Ratings and reviews for buyers and sellers

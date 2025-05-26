@@ -4,16 +4,18 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressCreateDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record UserRegistrationDto(
         @NotBlank
         @Email
         String email,
         @NotBlank
-        String name,
+        String firstName,
+        @NotBlank
+        String lastName,
+        LocalDate birthdate,
         @NotBlank
         String password,
         @NotBlank
@@ -21,6 +23,5 @@ public record UserRegistrationDto(
         Role role,
         String gender,
         String phoneNumber,
-        AddressCreateDto addressCreateDto,
-        Date birthDate
+        AddressCreateDto addressCreateDto
 ) {}

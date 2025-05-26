@@ -67,8 +67,7 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody UserRegistrationDto userRegDto){
-
-        User user=userService.register(userRegDto.name(),userRegDto.email(),userRegDto.password(), userRegDto.confirmPassword(), userRegDto.role()==null? Role.USER:userRegDto.role(), userRegDto.gender(), userRegDto.phoneNumber(), userRegDto.addressCreateDto(), userRegDto.birthDate());
+        User user=userService.register(userRegDto.firstName(), userRegDto.lastName() ,userRegDto.email(),userRegDto.password(), userRegDto.confirmPassword(), userRegDto.role()==null? Role.USER:userRegDto.role(), userRegDto.gender(), userRegDto.phoneNumber(), userRegDto.addressCreateDto(), userRegDto.birthdate());
         return ResponseEntity.ok(Map.of("token", jwtUtil.generateToken(user)));
     }
 

@@ -4,10 +4,9 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,19 +20,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String phoneNumber;
     private String gender;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public User(String email, String name, String password, Role role, String gender, String phoneNumber, Address address, Date birthDate){
+    public User(String email, String firstName, String lastName, String password, Role role, String gender, String phoneNumber, Address address, LocalDate birthDate){
         this.email=email;
-        this.name=name;
+        this.firstName=firstName;
+        this.lastName=lastName;
         this.password=password;
         this.role=role;
         this.gender=gender;
