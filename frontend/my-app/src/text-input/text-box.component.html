@@ -1,0 +1,11 @@
+<div class="input-group">
+  <label class="input-label">{{ label }}</label>
+  <input
+    [type]="type"
+    class="text-input"
+    [placeholder]="placeholder"
+    [value]="value"
+    (input)="onInput($event)"
+    [required]="required"
+  />
+</div>
