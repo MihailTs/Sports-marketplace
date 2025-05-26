@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,15 +70,30 @@ public class UserService implements UserDetailsService {
                 user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())));
     }
 
-    public User register(String name, String email, String password, String confirmPassword, String role){
-        if(userRepository.findByEmail(email).isPresent()){
+    public User register(String firstName, String lastName, String email, String password, String confirmPassword,
+                         LocalDate birthdate, String phone, String gender, String role) {
+
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new EmailAlreadyExistsException(email);
         }
-        else if(!password.equals(confirmPassword)){
+
+        if (!password.equals(confirmPassword)) {
             throw new WrongEmailOrPasswordException();
-            //TODO
         }
-        User user = new User(email, name, encoder.encode(password), role);
+
+        String encodedPassword = encoder.encode(password);
+        String userRole = (role == null || role.isBlank()) ? "user" : role;
+
+        User user = new User(
+                email,
+                encodedPassword,
+                firstName,
+                lastName,
+                birthdate,
+                phone,
+                gender,
+                userRole
+        );
 
         return userRepository.save(user);
     }
@@ -100,8 +116,8 @@ public class UserService implements UserDetailsService {
         if(userDto.address()!=null){
             updateAddress(userToChange, userDto.address());
         }
-        if(userDto.name()!=null){
-            userToChange.setName(userDto.name());
+        if(userDto.firstName()!=null){
+            userToChange.setFirstName(userDto.firstName());
         }
         if(userDto.phoneNumber()!=null){
             userToChange.setPhoneNumber(userDto.phoneNumber());
@@ -149,6 +165,4 @@ public class UserService implements UserDetailsService {
             addressRepository.save(nextAddress);
         }
     }
-
-
 }

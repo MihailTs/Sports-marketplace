@@ -52,12 +52,25 @@ public class UserController {
         return ResponseEntity.ok(jwtUtil.generateToken(user.getEmail(), user.getId()));
     }
 
-    @PostMapping("/auth/register")
-    public ResponseEntity<String> register(@RequestBody UserRegistrationDto userRegDto){
 
-        User user=userService.register(userRegDto.name(),userRegDto.email(),userRegDto.password(), userRegDto.confirmPassword(), userRegDto.role()==null?"user":userRegDto.role());
-        Authentication authentication=authManager.authenticate(new UsernamePasswordAuthenticationToken(userRegDto.email(), userRegDto.password()));
-//?
+    @PostMapping("/auth/register")
+    public ResponseEntity<String> register(@RequestBody UserRegistrationDto userRegDto) {
+        User user = userService.register(
+                userRegDto.firstName(),
+                userRegDto.lastName(),
+                userRegDto.email(),
+                userRegDto.password(),
+                userRegDto.confirmPassword(),
+                userRegDto.birthdate(),
+                userRegDto.phone(),
+                userRegDto.gender(),
+                userRegDto.role() == null ? "user" : userRegDto.role()
+        );
+
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userRegDto.email(), userRegDto.password())
+        );
+
         return ResponseEntity.ok(jwtUtil.generateToken(user.getEmail(), user.getId()));
     }
 
