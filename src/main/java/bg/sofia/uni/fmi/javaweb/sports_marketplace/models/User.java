@@ -1,6 +1,5 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -17,28 +17,42 @@ import java.util.Objects;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String email;
+    @Column(name="first_name")
     private String firstName;
+    @Column(name="last_name")
     private String lastName;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(name="birth_date")
     private LocalDate birthDate;
-    private String phoneNumber;
+    private String phone;
     private String gender;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name="updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 
-    public User(String email, String firstName, String lastName, String password, Role role, String gender, String phoneNumber, Address address, LocalDate birthDate){
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="address")
+    private Address address;
+
+    @OneToMany(mappedBy = "recepient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> receivedReviews;
+
+    public User(String email, String firstName, String lastName, String password, Role role, String gender, String phone, Address address, LocalDate birthDate){
         this.email=email;
         this.firstName=firstName;
         this.lastName=lastName;
         this.password=password;
         this.role=role;
         this.gender=gender;
-        this.phoneNumber=phoneNumber;
+        this.phone=phone;
         this.address=address;
         this.birthDate=birthDate;
     }
@@ -46,20 +60,13 @@ public class User {
     //@OneToMany(mappedBy = "user")
     //private List<Purchase> orders;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="address")
-    private Address address;
-
-    @OneToMany(mappedBy = "recepient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> receivedReviews;
-
     //@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     //private List<Review> writtenReviews;
 
-    @Getter
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user")
-    private List<Event> events;
+    //@Getter
+    //@JsonManagedReference
+    //@OneToMany(mappedBy = "created_by_id")
+    //private List<Event> events;
 
     @Override
     public boolean equals(Object o){

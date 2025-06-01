@@ -6,9 +6,10 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record UserDto(
-        Long id,
+        UUID id,
         String email,
         Role role,
         String firstName,
@@ -27,7 +28,7 @@ public record UserDto(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getGender(),
-                user.getPhoneNumber(),
+                user.getPhone(),
                 user.getAddress()==null?null:AddressDto.fromEntity(user.getAddress()),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

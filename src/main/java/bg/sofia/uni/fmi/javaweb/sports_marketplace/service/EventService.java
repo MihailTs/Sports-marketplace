@@ -3,27 +3,29 @@ package bg.sofia.uni.fmi.javaweb.sports_marketplace.service;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.event.EventDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.NoSuchEventException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.TimeframeMismatchException;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UnAuthorizedAccessException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Event;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.EventParticipant;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.EventParticipantRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.EventRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
-import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EventService {
     private UserRepository userRepository;
     private EventRepository eventRepository;
+    private EventParticipantRepository eventParticipantRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, EventParticipantRepository eventParticipantRepository) {
+        this.eventParticipantRepository=eventParticipantRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
     }
@@ -32,7 +34,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public Event getEventById(Long id) {
+    public Event getEventById(UUID id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
             throw new NoSuchEventException();
@@ -48,10 +50,10 @@ public class EventService {
         if (eventDto.startTime().isAfter(eventDto.endTime())) {
             throw new TimeframeMismatchException();
         }
-        return eventRepository.save(new Event(eventDto.title(), eventDto.description(), eventDto.location(), eventDto.startTime(), eventDto.endTime(), user.get()));
+        return eventRepository.save(new Event(eventDto.title(), eventDto.description(), eventDto.location(), eventDto.startTime(), eventDto.endTime(), user.get(), eventDto.sport()));
     }
 
-    public void deleteEvent(Long id) {
+    public void deleteEvent(UUID id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
             throw new NoSuchEventException();
@@ -62,7 +64,7 @@ public class EventService {
         eventRepository.delete(event.get());
     }
 
-    public Event updateEvent(Long id, EventDto eventDto) {
+    public Event updateEvent(UUID id, EventDto eventDto) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
             throw new NoSuchEventException();
@@ -86,7 +88,17 @@ public class EventService {
 
         return eventRepository.save(eventToChange);
     }
-    public List<Event> getEventSByUserId(Long id){
-        return eventRepository.findByUserId(id);
+    public List<Event> getEventsByUserId(UUID id){
+        return eventRepository.findByCreatedById(id);
+    }
+
+    public List<EventParticipant> getParticipantsForEvent(UUID eventId) {
+        Optional<Event> event = eventRepository.findById(eventId);
+
+        if (event.isEmpty()) {
+            throw new NoSuchEventException();
+        }
+
+        return eventParticipantRepository.findAllByEventId(eventId);
     }
 }

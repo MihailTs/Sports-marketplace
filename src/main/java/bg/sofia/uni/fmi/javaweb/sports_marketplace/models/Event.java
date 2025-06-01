@@ -6,41 +6,45 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.id.uuid.UuidGenerator;
 import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
 @Data
 public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private Long id;
-    @Getter
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String title;
-    @Getter
     private String description;
-    @Getter
     private String location;
-    @Getter
+    @Column(name = "start_datetime")
     private LocalDateTime startTime;
-    @Getter
+    @Column(name = "end_datetime")
     private LocalDateTime endTime;
-    @Getter
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name="sport_id")
+    private Sport sport;
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="userId", nullable = false)
-    private User user;
+    @JoinColumn(name="created_by_id", nullable = false)
+    private User createdBy;
 
-    public Event(String title, String description, String location, LocalDateTime startTime, LocalDateTime endTime, User user){
+    public Event(String title, String description, String location, LocalDateTime startTime, LocalDateTime endTime, User createdBy, Sport sport){
         this.title=title;
         this.description=description;
         this.location=location;
         this.startTime=startTime;
         this.endTime=endTime;
-        this.user=user;
+        this.createdBy=createdBy;
+        this.createdAt=LocalDateTime.now();
     }
 
 }

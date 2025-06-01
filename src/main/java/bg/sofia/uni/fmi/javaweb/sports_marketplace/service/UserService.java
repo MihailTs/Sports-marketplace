@@ -8,10 +8,9 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.PasswordMismatchEx
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.WrongEmailOrPasswordException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Address;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.*;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.AddressRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.EventParticipantRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,25 +24,28 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final AddressRepository addressRepository;
+    private final EventParticipantRepository eventParticipantRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository, EventParticipantRepository eventParticipantRepository){
         this.userRepository=userRepository;
         this.encoder=encoder;
         this.addressRepository=addressRepository;
+        this.eventParticipantRepository=eventParticipantRepository;
     }
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id){
+    public Optional<User> getUserById(UUID id){
         return userRepository.findById(id);
     }
 
@@ -108,7 +110,7 @@ public class UserService implements UserDetailsService {
             userToChange.setFirstName(userDto.firstName());
         }
         if(userDto.phoneNumber()!=null){
-            userToChange.setPhoneNumber(userDto.phoneNumber());
+            userToChange.setPhone(userDto.phoneNumber());
         }
         if(userDto.gender()!=null){
             userToChange.setGender(userDto.gender());
@@ -147,11 +149,10 @@ public class UserService implements UserDetailsService {
             if (addressDto.city() != null) {
                 oldAddress.setCity(addressDto.city());
             }
-            addressRepository.save(oldAddress);
+            user.setAddress(oldAddress);
         } else {
             Address nextAddress = AddressDto.toEntity(addressDto);
             user.setAddress(nextAddress);
-            addressRepository.save(nextAddress);
         }
     }
 }

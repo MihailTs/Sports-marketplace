@@ -5,6 +5,7 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserLoginDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserRegistrationDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UnAuthorizedAccessException;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Event;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
@@ -22,11 +23,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,13 +49,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable Long id){
+    public UserDto getUserById(@PathVariable UUID id){
         return userService.getUserById(id).map(UserDto::fromEntity).orElseThrow();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> changeUser(@PathVariable Long id, @RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> changeUser(@PathVariable UUID id, @RequestBody UserDto userDto){
         Optional<User> user=userService.getUserById(id);
         return ResponseEntity.ok(UserDto.fromEntity(userService.updateUser(user, userDto)));
     }
@@ -79,7 +82,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id){
         Optional<User> user=userService.getUserById(id);
         userService.deleteUser(user);
         return ResponseEntity.ok("Successfully deleted");
@@ -105,21 +108,30 @@ public class UserController {
 
     @DeleteMapping("/me/events/{id}")
     @PreAuthorize("@securityService.isOwnerOfEvent(#id, principal.username)")
-    public ResponseEntity<String> deleteEvent(@PathVariable Long id){
+    public ResponseEntity<String> deleteEvent(@PathVariable UUID id){
         eventService.deleteEvent(id);
         return ResponseEntity.ok("Successfully deleted.");
     }
 
     @PutMapping("/me/events/{id}")
     @PreAuthorize("@securityService.isOwnerOfEvent(#id, principal.username)")
-    public ResponseEntity<String> updateEvent(@PathVariable Long id, @RequestBody EventDto eventDto){
+    public ResponseEntity<String> updateEvent(@PathVariable UUID id, @RequestBody EventDto eventDto){
         eventService.updateEvent(id, eventDto);
         return ResponseEntity.ok("Successfully deleted.");
     }
 
-    @GetMapping("/users/{id}/events")
-    public ResponseEntity<List<EventDto>> getEventsForUser(@PathVariable Long id){
-        return ResponseEntity.ok(eventService.getEventSByUserId(id).stream().map(EventDto::fromEntity).toList());
+    @GetMapping("/{id}/events")
+    public ResponseEntity<List<EventDto>> getEventsForUser(@PathVariable UUID id){
+        return ResponseEntity.ok(eventService.getEventsByUserId(id).stream().map(EventDto::fromEntity).toList());
     }
 
+    @GetMapping("/em/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
+        return ResponseEntity.ok(UserDto.fromEntity(userService.getUserByEmail(email).get()));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getSelf(Authentication authentication){
+        return ResponseEntity.ok(UserDto.fromEntity(userService.getUserByEmail(authentication.getName()).get()));
+    }
 }

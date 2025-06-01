@@ -34,7 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(customizer->customizer.authenticationEntryPoint(authEntryPointJwt()))
+                //.exceptionHandling(customizer->customizer.authenticationEntryPoint(authEntryPointJwt()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->auth.requestMatchers("/api/users/auth/**")
                         .permitAll().anyRequest().authenticated())
@@ -47,8 +47,8 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public AuthEntryPointJwt authEntryPointJwt(){
-        return new AuthEntryPointJwt();
-    }
+    //@Bean
+    //public AuthEntryPointJwt authEntryPointJwt(){
+    //    return new AuthEntryPointJwt();
+    //}
 }
