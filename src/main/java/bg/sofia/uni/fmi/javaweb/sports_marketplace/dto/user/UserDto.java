@@ -8,7 +8,8 @@ public record UserDto(
         Long id,
         String email,
         String role,
-        String name,
+        String firstName,
+        String lastName,
         String gender,
         String phoneNumber,
         AddressDto address
@@ -18,7 +19,8 @@ public record UserDto(
                 user.getId(),
                 user.getEmail(),
                 user.getRole(),
-                user.getName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getGender(),
                 user.getPhoneNumber(),
                 user.getAddress()==null?null:AddressDto.fromEntity(user.getAddress())
