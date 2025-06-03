@@ -1,0 +1,53 @@
+<div class="container">
+  <section class="form-section">
+    <app-form>
+      <h2 class="form-title">Create an Account</h2>
+      <div class="input-group">
+        <text-box label="First Name" id="firstName" formControlName="firstName" type="text" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Last Name" id="lastName" formControlName="lastName" type="text" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Email" id="email" formControlName="email" type="email" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Password" id="password" formControlName="password" type="password" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Confirm Password" id="confirmPassword" formControlName="confirmPassword" type="password" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Birthdate" id="birthdate" formControlName="birthdate" type="date" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <text-box label="Phone" id="phone" formControlName="phone" type="tel" class="text-input" />
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="gender">Gender</label>
+        <select id="gender" formControlName="gender" class="text-input">
+          <option value="" disabled selected>Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <primary-button text="Register" type="submit" class="primary-btn">Register</primary-button>
+
+      <div class="form-footer">
+        <p>Already have an account?</p>
+        <a routerLink="/login">
+          <secondary-button text="Login"></secondary-button>
+        </a>
+      </div>
+    </app-form>
+  </section>
+</div>

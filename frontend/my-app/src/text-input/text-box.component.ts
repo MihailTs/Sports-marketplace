@@ -1,9 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'text-box',
+  standalone: true,
   templateUrl: './text-box.component.html',
-  styleUrls: ['./text-box.component.css']
+  styleUrls: ['./text-box.component.css'],
+  imports: [CommonModule, FormsModule]
 })
 export class TextBoxComponent {
   @Input() label: string = 'Label';

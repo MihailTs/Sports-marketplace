@@ -1,0 +1,16 @@
+<div class="container">
+  <section class="form-section">
+    <h2>Login</h2>
+    <app-form><!-- [formGroup]="loginForm" (ngSubmit)="onSubmit()"-->
+      <div class="input-group">
+        <text-box label="Email" type="email" id="email" formControlName="email" class="text-input" />
+      </div>
+      <div class="input-group">
+        <text-box label="Password" type="password" id="password" formControlName="password" class="text-input" />
+      </div>
+      <primary-button text="Submit" type="submit" class="primary-btn"/>
+    </app-form>
+    <p>Don't have an account?</p>
+      <a routerLink="/register"><secondary-button text="Register here"></secondary-button></a>
+  </section>
+</div>
