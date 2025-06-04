@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.ElementCollection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,8 +84,39 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
-        return ResponseEntity.badRequest().body(errors); // HTTP 400
+        return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(NoSuchForumException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchForum(NoSuchForumException ex) {
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoSuchForumPostException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchForumPost(NoSuchForumPostException ex) {
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoSuchForumCommentException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchForumComment(NoSuchForumCommentException ex) {
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Map<String, Object>> handleJWTException(JwtException ex) {
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
 
 }

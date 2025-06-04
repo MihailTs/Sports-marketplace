@@ -9,6 +9,8 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.ForumPostRepositor
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.ForumRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class ForumService {
         this.sportRepository=sportRepository;
     }
 
-    public List<Forum> getAllForums(){
-        return forumRepository.findAll();
+    public Page<Forum> getAllForums(Pageable pageable){
+        return forumRepository.findAll(pageable);
     }
 
     public Forum createForum(ForumCreationDto forumDto){

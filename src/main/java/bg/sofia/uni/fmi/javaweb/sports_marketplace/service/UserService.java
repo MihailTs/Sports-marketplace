@@ -9,9 +9,8 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistExc
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.WrongEmailOrPasswordException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.*;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.AddressRepository;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.EventParticipantRepository;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,13 +32,19 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder encoder;
     private final AddressRepository addressRepository;
     private final EventParticipantRepository eventParticipantRepository;
+    private final ForumPostRepository forumPostRepository;
+    private final ForumCommentRepository forumCommentRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository, EventParticipantRepository eventParticipantRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository, EventParticipantRepository eventParticipantRepository, ForumPostRepository forumPostRepository, ForumCommentRepository forumCommentRepository, EventRepository eventRepository){
         this.userRepository=userRepository;
         this.encoder=encoder;
         this.addressRepository=addressRepository;
         this.eventParticipantRepository=eventParticipantRepository;
+        this.forumCommentRepository=forumCommentRepository;
+        this.forumPostRepository=forumPostRepository;
+        this.eventRepository=eventRepository;
     }
 
     public List<User> getAllUsers(){
@@ -84,10 +90,12 @@ public class UserService implements UserDetailsService {
         }
         User user = new User(email, firstName, lastName, encoder.encode(password), role, gender, phoneNumber, addressDto!=null?AddressCreateDto.toEntity(addressDto):null, birthDate);
         user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Optional<User> user){
         if(user.isEmpty()){
             throw new UserDoesntExistException();
@@ -95,6 +103,12 @@ public class UserService implements UserDetailsService {
         if(user.get().getAddress()!=null&&userRepository.countByAddress(user.get().getAddress())==1){
             addressRepository.delete(user.get().getAddress());
         }
+
+        forumPostRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        forumCommentRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        eventParticipantRepository.deleteAllByUserId(user.get().getId());
+        eventRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
         userRepository.delete(user.get());
     }
 
@@ -121,7 +135,6 @@ public class UserService implements UserDetailsService {
 
     private void updateAddress(User user, AddressDto addressDto) {
         Address oldAddress = user.getAddress();
-
 
         Optional<Address> newAddress = addressRepository.findByCityAndCountryAndStateAndStreetAndZipCode(addressDto.city(), addressDto.country(), addressDto.state(), addressDto.street(), addressDto.zipCode());
 

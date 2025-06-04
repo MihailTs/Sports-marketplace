@@ -15,6 +15,7 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,6 +64,7 @@ public class ForumCommentService {
         }
         User user=userRepository.findByEmail(email).orElseThrow(UserDoesntExistException::new);
         ForumPost forumPost=forumPostRepository.findById(postId).orElseThrow(NoSuchForumPostException::new);
+        forumPost.setUpdatedAt(LocalDateTime.now());
         return forumCommentRepository.save(new ForumComment(user, forumPost, forumCommentCreationDto.content()));
     }
 }

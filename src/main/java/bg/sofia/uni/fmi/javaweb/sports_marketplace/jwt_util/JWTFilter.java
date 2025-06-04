@@ -3,6 +3,7 @@ package bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.WrongEmailOrPasswordException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.UserService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -44,6 +45,8 @@ public class JWTFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
+            }else {
+                throw new JwtException("Invalid token");
             }
         }
         filterChain.doFilter(request, response);

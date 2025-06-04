@@ -31,20 +31,19 @@ public class ForumPost {
 
     private String content;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "forumPost", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ForumComment> comments=new ArrayList<>();
+    List<ForumComment> comments = new ArrayList<>();
 
-    public ForumPost(Forum forum, User user, String title, String content){
-        this.forum=forum;
-        this.user=user;
-        this.title=title;
-        this.content=content;
-        this.createdAt= LocalDateTime.now();
+    public ForumPost(Forum forum, User user, String title, String content) {
+        this.forum = forum;
+        this.user = user;
+        this.title = title;
+        this.content = content;
     }
 }

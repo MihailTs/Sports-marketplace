@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 public class SportsMarketplaceApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SportsMarketplaceApplication.class, args);
     }
-
 }

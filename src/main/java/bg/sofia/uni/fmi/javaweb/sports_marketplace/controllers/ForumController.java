@@ -1,11 +1,16 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.controllers;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.PagedResponse;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.forum.*;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Forum;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.ForumCommentService;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.ForumPostService;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.ForumService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -29,8 +34,8 @@ public class ForumController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Forum>> getAllForums(){
-        return ResponseEntity.ok(forumService.getAllForums());
+    public ResponseEntity<PagedResponse<ForumDto>> getAllForums(@PageableDefault(size=10, sort="updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+        return ResponseEntity.ok(PagedResponse.fromPage(forumService.getAllForums(pageable), ForumDto::fromEntity));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,8 +51,8 @@ public class ForumController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<List<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id){
-        return ResponseEntity.ok(forumPostService.getAllForumPosts(id).stream().map(ForumPostDto::fromEntity).toList());
+    public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+        return ResponseEntity.ok(PagedResponse.fromPage(forumPostService.getAllForumPosts(id, pageable), ForumPostDto::fromEntity));
     }
 
     @PostMapping("/{forumId}/posts")
@@ -89,5 +94,10 @@ public class ForumController {
     @GetMapping("/{forumId}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<ForumCommentDto> getComment(@PathVariable UUID forumId, @PathVariable UUID postId, @PathVariable UUID commentId){
         return ResponseEntity.ok(ForumCommentDto.fromEntity(forumCommentService.getForumComment(forumId, postId, commentId)));
+    }
+
+    @GetMapping("{forumId}/posts/search")
+    public ResponseEntity<PagedResponse<ForumPostDto>> searchPosts(@PathVariable UUID forumId, @RequestParam String keyword, @PageableDefault(size=10, sort="updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(PagedResponse.fromPage(forumPostService.searchPosts(forumId, keyword, pageable), ForumPostDto::fromEntity));
     }
 }
