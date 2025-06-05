@@ -1,46 +1,140 @@
+<!-- register.component.html -->
 <div class="container">
   <section class="form-section">
-    <app-form [formGroup]="registerForm" (onSubmit)="onSubmit()" [title]="'Create an Account'">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="registration-form">
       <h2 class="form-title">Create an Account</h2>
-      <div class="input-group">
-        <text-box label="First Name" id="firstName" formControlName="firstName" type="text" class="text-input" />
+
+      <!-- Error Message Display -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
       </div>
 
       <div class="input-group">
-        <text-box label="Last Name" id="lastName" formControlName="lastName" type="text" class="text-input" />
+        <text-box
+          label="First Name"
+          id="firstName"
+          formControlName="firstName"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('firstName')" />
+        <div *ngIf="getFieldError('firstName')" class="field-error">
+          {{ getFieldError('firstName') }}
+        </div>
       </div>
 
       <div class="input-group">
-        <text-box label="Email" id="email" formControlName="email" type="email" class="text-input" />
+        <text-box
+          label="Last Name"
+          id="lastName"
+          formControlName="lastName"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('lastName')" />
+        <div *ngIf="getFieldError('lastName')" class="field-error">
+          {{ getFieldError('lastName') }}
+        </div>
       </div>
 
       <div class="input-group">
-        <text-box label="Password" id="password" formControlName="password" type="password" class="text-input" />
+        <text-box
+          label="Email"
+          id="email"
+          formControlName="email"
+          type="email"
+          class="text-input"
+          [class.error]="getFieldError('email')" />
+        <div *ngIf="getFieldError('email')" class="field-error">
+          {{ getFieldError('email') }}
+        </div>
       </div>
 
       <div class="input-group">
-        <text-box label="Confirm Password" id="confirmPassword" formControlName="confirmPassword" type="password" class="text-input" />
+        <text-box
+          label="Password"
+          id="password"
+          formControlName="password"
+          type="password"
+          class="text-input"
+          [class.error]="getFieldError('password')" />
+        <div *ngIf="getFieldError('password')" class="field-error">
+          {{ getFieldError('password') }}
+        </div>
       </div>
 
       <div class="input-group">
-        <text-box label="Birthdate" id="birthdate" formControlName="birthdate" type="date" class="text-input" />
+        <text-box
+          label="Confirm Password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          type="password"
+          class="text-input"
+          [class.error]="getPasswordError()" />
+        <div *ngIf="getPasswordError()" class="field-error">
+          {{ getPasswordError() }}
+        </div>
       </div>
 
       <div class="input-group">
-        <text-box label="Phone" id="phone" formControlName="phone" type="tel" class="text-input" />
+        <text-box
+          label="Birthdate"
+          id="birthdate"
+          formControlName="birthdate"
+          type="date"
+          class="text-input"
+          [class.error]="getFieldError('birthdate')" />
+        <div *ngIf="getFieldError('birthdate')" class="field-error">
+          {{ getFieldError('birthdate') }}
+        </div>
+      </div>
+
+      <div class="input-group">
+        <text-box
+          label="Phone (Optional)"
+          id="phone"
+          formControlName="phone"
+          type="tel"
+          class="text-input"
+          [class.error]="getFieldError('phone')" />
+        <div *ngIf="getFieldError('phone')" class="field-error">
+          {{ getFieldError('phone') }}
+        </div>
+      </div>
+
+      <div class="input-group">
+        <text-box
+          label="Address"
+          id="address"
+          formControlName="address"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('phone')" />
+        <div *ngIf="getFieldError('address')" class="field-error">
+          {{ getFieldError('address') }}
+        </div>
       </div>
 
       <div class="input-group">
         <label class="input-label" for="gender">Gender</label>
-        <select id="gender" formControlName="gender" class="text-input">
+        <select
+          id="gender"
+          formControlName="gender"
+          class="text-input"
+          [class.error]="getFieldError('gender')">
           <option value="" disabled selected>Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
         </select>
+        <div *ngIf="getFieldError('gender')" class="field-error">
+          {{ getFieldError('gender') }}
+        </div>
       </div>
 
-      <primary-button text="Register" type="submit" class="primary-btn">Register</primary-button>
+      <primary-button
+        text="Register"
+        type="submit"
+        class="primary-btn">
+        {{ isSubmitting ? 'Creating Account...' : 'Register' }}
+      </primary-button>
 
       <div class="form-footer">
         <p>Already have an account?</p>
@@ -48,6 +142,6 @@
           <secondary-button text="Login"></secondary-button>
         </a>
       </div>
-    </app-form>
+    </form>
   </section>
 </div>

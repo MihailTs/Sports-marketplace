@@ -1,12 +1,12 @@
+// register.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
 import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
 import { TextBoxComponent } from '../../text-input/text-box.component';
-import { FormComponent } from '../form/form.component';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -16,15 +16,16 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
   imports: [
     CommonModule,
     RouterModule,
-    PrimaryButtonComponent,
     ReactiveFormsModule,
+    PrimaryButtonComponent,
     SecondaryButtonComponent,
-    TextBoxComponent,
-    FormComponent
+    TextBoxComponent
   ]
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  isSubmitting = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -32,14 +33,15 @@ export class RegisterComponent {
     private http: HttpClient
   ) {
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       birthdate: ['', Validators.required],
-      phone: [''],
+      phone: ['', Validators.pattern(/^\+?[\d\s\-\(\)]+$/)],
       gender: ['', Validators.required],
+      address: ['', Validators.required],
       role: ['user']
     }, { validators: this.passwordsMatchValidator });
   }
@@ -50,19 +52,48 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { passwordsMismatch: true };
   }
 
-  onSubmit() {
-    if (this.registerForm.invalid) return;
+  getFieldError(fieldName: string): string {
+    const field = this.registerForm.get(fieldName);
+    if (field?.touched && field?.errors) {
+      if (field.errors['required']) return `${fieldName} is required`;
+      if (field.errors['email']) return 'Please enter a valid email';
+      if (field.errors['minlength']) return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
+      if (field.errors['pattern']) return 'Please enter a valid phone number';
+    }
+    return '';
+  }
 
+  getPasswordError(): string {
+    if (this.registerForm.errors?.['passwordsMismatch'] &&
+      this.registerForm.get('confirmPassword')?.touched) {
+      return 'Passwords do not match';
+    }
+    return '';
+  }
+
+  onSubmit() {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.errorMessage = '';
     const formData = this.registerForm.value;
 
     this.http.post('/api/users/auth/register', formData, { responseType: 'text' }).subscribe({
       next: (token: string) => {
-        console.log('Token:', token);
+        // Not secure but works for now
         localStorage.setItem('jwtToken', token);
         this.router.navigate(['/']);
       },
       error: (err) => {
         console.error('Registration failed:', err);
+        this.errorMessage = err.error?.message || 'Registration failed. Please try again.';
+        this.isSubmitting = false;
+      },
+      complete: () => {
+        this.isSubmitting = false;
       }
     });
   }
