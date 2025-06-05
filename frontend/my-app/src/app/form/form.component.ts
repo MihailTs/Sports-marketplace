@@ -1,13 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.css']
 })
 export class FormComponent {
-  @Input() title: string = '';
+  @Input() formGroup!: FormGroup;
+  @Input() title?: string;
+  @Output() onSubmit = new EventEmitter<void>();
 }

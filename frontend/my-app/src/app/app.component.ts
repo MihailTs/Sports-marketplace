@@ -7,6 +7,7 @@ import {TextAreaComponent} from '../text-input/text-area.component';
 import {ToggleButtonComponent} from '../buttons/toggle-button.component';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ import {HomeComponent} from './home/home.component';
     PrimaryButtonComponent,
     TextAreaComponent,
     SecondaryButtonComponent,
-    TextBoxComponent
+    TextBoxComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

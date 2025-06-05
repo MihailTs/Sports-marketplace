@@ -1,4 +1,4 @@
-<div class="form-container">
+<form class="form-container" [formGroup]="formGroup" (ngSubmit)="onSubmit.emit()">
   <h2 *ngIf="title">{{ title }}</h2>
   <ng-content></ng-content>
-</div>
+</form>

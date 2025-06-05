@@ -1,6 +1,6 @@
 <div class="container">
   <section class="form-section">
-    <app-form>
+    <app-form [formGroup]="registerForm" (onSubmit)="onSubmit()" [title]="'Create an Account'">
       <h2 class="form-title">Create an Account</h2>
       <div class="input-group">
         <text-box label="First Name" id="firstName" formControlName="firstName" type="text" class="text-input" />
