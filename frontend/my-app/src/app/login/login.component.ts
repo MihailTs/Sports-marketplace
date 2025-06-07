@@ -1,39 +1,74 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import {PrimaryButtonComponent} from '../../buttons/primary-button.component';
-import {SecondaryButtonComponent} from '../../buttons/secondary-button.component';
-import {TextBoxComponent} from '../../text-input/text-box.component';
-import {FormComponent} from '../form/form.component';
-// import { AuthService } from '../auth.service';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
+import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
+import { TextBoxComponent } from '../../text-input/text-box.component';
+import { FormComponent } from '../form/form.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, RouterModule, PrimaryButtonComponent, SecondaryButtonComponent, TextBoxComponent, FormComponent]
+  imports: [
+    CommonModule,
+    RouterModule,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
+    TextBoxComponent,
+    FormComponent,
+    FormsModule,
+    ReactiveFormsModule,
+  ]
 })
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder/*, private authService: AuthService*/) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
-  //
-  // onSubmit() {
-  //   if (this.loginForm.valid) {
-  //     // this.authService.login(this.loginForm.value).subscribe({
-  //       next: (token) => {
-  //         localStorage.setItem('token', token);
-  //         // Navigate to home or dashboard
-  //       },
-  //       error: (err) => alert('Login failed'),
-  //     });
-  //   }
-  // }
+
+  errorMessage: string | null = null;
+  isSubmitting = false;
+
+  getFieldError(field: string): string | null {
+    const control = this.loginForm.get(field);
+    if (control && control.touched && control.invalid) {
+      if (control.errors?.['required']) return 'This field is required.';
+      if (control.errors?.['email']) return 'Invalid email format.';
+    }
+    return null;
+  }
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.isSubmitting = true;
+      this.errorMessage = null;
+
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (token) => {
+          localStorage.setItem('token', token);
+          this.router.navigate(['/']);
+          this.isSubmitting = false;
+        },
+        error: (err) => {
+          this.errorMessage = 'Login failed. Please check your credentials.';
+          this.isSubmitting = false;
+        },
+      });
+    } else {
+      this.loginForm.markAllAsTouched();
+    }
+  }
 }

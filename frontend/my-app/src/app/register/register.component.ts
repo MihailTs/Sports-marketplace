@@ -1,12 +1,11 @@
-// register.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
 import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
 import { TextBoxComponent } from '../../text-input/text-box.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +29,7 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private authService: AuthService // ✅ Use AuthService
   ) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -79,11 +78,11 @@ export class RegisterComponent {
 
     this.isSubmitting = true;
     this.errorMessage = '';
+
     const formData = this.registerForm.value;
 
-    this.http.post('/api/users/auth/register', formData, { responseType: 'text' }).subscribe({
+    this.authService.register(formData).subscribe({
       next: (token: string) => {
-        // Not secure but works for now
         localStorage.setItem('jwtToken', token);
         this.router.navigate(['/']);
       },

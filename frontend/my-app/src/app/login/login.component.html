@@ -1,16 +1,52 @@
 <div class="container">
   <section class="form-section">
-    <h2>Login</h2>
-    <app-form><!-- [formGroup]="loginForm" (ngSubmit)="onSubmit()"-->
-      <div class="input-group">
-        <text-box label="Email" type="email" id="email" formControlName="email" class="text-input" />
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <h2 class="form-title">Login</h2>
+
+      <!-- Error Message Display -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
       </div>
+
       <div class="input-group">
-        <text-box label="Password" type="password" id="password" formControlName="password" class="text-input" />
+        <text-box
+          label="Email"
+          id="email"
+          formControlName="email"
+          type="email"
+          class="text-input"
+          [class.error]="getFieldError('email')" />
+        <div *ngIf="getFieldError('email')" class="field-error">
+          {{ getFieldError('email') }}
+        </div>
       </div>
-      <primary-button text="Submit" type="submit" class="primary-btn"/>
-    </app-form>
-    <p>Don't have an account?</p>
-      <a routerLink="/register"><secondary-button text="Register here"></secondary-button></a>
+
+      <div class="input-group">
+        <text-box
+          label="Password"
+          id="password"
+          formControlName="password"
+          type="password"
+          class="text-input"
+          [class.error]="getFieldError('password')" />
+        <div *ngIf="getFieldError('password')" class="field-error">
+          {{ getFieldError('password') }}
+        </div>
+      </div>
+
+      <primary-button
+        text="Login"
+        type="submit"
+        class="primary-btn">
+        {{ isSubmitting ? 'Logging in...' : 'Login' }}
+      </primary-button>
+
+      <div class="form-footer">
+        <p>Don't have an account?</p>
+        <a routerLink="/register">
+          <secondary-button text="Register here"></secondary-button>
+        </a>
+      </div>
+    </form>
   </section>
 </div>

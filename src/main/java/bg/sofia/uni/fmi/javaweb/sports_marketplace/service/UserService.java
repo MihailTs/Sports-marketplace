@@ -31,9 +31,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository){
-        this.userRepository=userRepository;
-        this.encoder=encoder;
-        this.addressRepository=addressRepository;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.addressRepository = addressRepository;
     }
 
     public List<User> getAllUsers(){
@@ -53,8 +53,8 @@ public class UserService implements UserDetailsService {
     }
 
     public User login(String email, String password){
-        Optional<User> user=userRepository.findByEmail(email);
-        if(user.isEmpty()||encoder.matches(password, user.get().getPassword())){
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty() || !encoder.matches(password, user.get().getPassword())){
             throw new WrongEmailOrPasswordException();
         }
         return user.get();
@@ -130,7 +130,6 @@ public class UserService implements UserDetailsService {
 
     private void updateAddress(User user, AddressDto addressDto) {
         Address oldAddress = user.getAddress();
-
 
         Optional<Address> newAddress = addressRepository.findByCityAndCountryAndStateAndStreetAndZipCode(addressDto.city(), addressDto.country(), addressDto.state(), addressDto.street(), addressDto.zipCode());
 
