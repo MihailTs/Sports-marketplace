@@ -8,6 +8,7 @@ import { SecondaryButtonComponent } from '../../buttons/secondary-button.compone
 import { TextBoxComponent } from '../../text-input/text-box.component';
 import { FormComponent } from '../form/form.component';
 import { AuthService } from '../auth/auth.service';
+import {AuthStateService} from '../state-services/authState.service';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authStateService: AuthStateService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -57,8 +59,9 @@ export class LoginComponent {
       this.errorMessage = null;
 
       this.authService.login(this.loginForm.value).subscribe({
-        next: (token) => {
-          localStorage.setItem('token', token);
+        next: (authResponse) => {
+          localStorage.setItem('token', authResponse.token);
+          this.authStateService.setUser(authResponse);
           this.router.navigate(['/']);
           this.isSubmitting = false;
         },

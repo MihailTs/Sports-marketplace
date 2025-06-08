@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.controllers;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.LoginResponseDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserLoginDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserRegistrationDto;
@@ -46,12 +47,19 @@ public class UserController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserLoginDto userLoginDto){
         Authentication authentication=authManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDto.email(), userLoginDto.password()));
         User user=userService.login(userLoginDto.email(), userLoginDto.password());
-        return ResponseEntity.ok(jwtUtil.generateToken(user.getEmail(), user.getId()));
-    }
+        LoginResponseDto response = new LoginResponseDto(
+                jwtUtil.generateToken(user.getEmail(), user.getId()),
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName()
+        );
 
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/auth/register")
     public ResponseEntity<String> register(@RequestBody UserRegistrationDto userRegDto) {
