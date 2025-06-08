@@ -7,7 +7,7 @@
 <ng-template #normalButton>
   <button [type]="type"
           (click)="handleClick()"
-          class="secondary-btn">
+          [ngClass]="['secondary-btn', class]">
     {{ text }}
   </button>
 </ng-template>

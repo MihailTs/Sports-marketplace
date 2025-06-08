@@ -13,6 +13,7 @@ export class SecondaryButtonComponent {
   @Input() text: string = 'Click Me';
   @Input() type: 'button' | 'submit' = 'button';
   @Input() routerLink?: string | any[];
+  @Input() class: string = ""
 
   @Output() clicked = new EventEmitter<void>();
 

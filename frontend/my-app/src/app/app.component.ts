@@ -1,5 +1,5 @@
 import {Component, HOST_TAG_NAME} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {SecondaryButtonComponent} from '../buttons/secondary-button.component';
 import {PrimaryButtonComponent} from '../buttons/primary-button.component';
 import {TextBoxComponent} from '../text-input/text-box.component';
@@ -7,7 +7,8 @@ import {TextAreaComponent} from '../text-input/text-area.component';
 import {ToggleButtonComponent} from '../buttons/toggle-button.component';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {FooterComponent} from './footer/footer.component';
+import {HeaderComponent} from './header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -20,10 +21,20 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     TextAreaComponent,
     SecondaryButtonComponent,
     TextBoxComponent,
+    FooterComponent,
+    HeaderComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'my-app';
+  title = 'Sports-marketplace';
+  hideHeader: boolean = false;
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(() => {
+      const hiddenRoutes = ['/login', '/register'];
+      this.hideHeader = hiddenRoutes.includes(this.router.url);
+    });
+  }
 }
