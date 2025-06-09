@@ -6,6 +6,7 @@ CREATE TABLE sport (
 CREATE TABLE users (
   id UUID PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
+  address_id UUID,
   password VARCHAR(255) NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
@@ -15,19 +16,18 @@ CREATE TABLE users (
   role varchar(5),
   profile_image_url TEXT,
   created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  updated_at TIMESTAMP,
+  FOREIGN KEY (address_id) REFERENCES address(id)
 );
 
 CREATE TABLE address (
   id UUID PRIMARY KEY,
-  user_id UUID,
   street VARCHAR(255),
   zip_code VARCHAR(255),
   city VARCHAR(255),
   country VARCHAR(255),
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE category (
