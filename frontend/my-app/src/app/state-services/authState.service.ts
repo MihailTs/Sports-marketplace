@@ -8,6 +8,7 @@ export interface AuthUser {
   firstName: string;
   lastName: string;
   token: string;
+  imageUrl: string;
 }
 
 @Injectable({ providedIn: 'root' })

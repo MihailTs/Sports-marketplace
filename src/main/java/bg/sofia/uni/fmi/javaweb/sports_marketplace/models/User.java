@@ -46,7 +46,18 @@ public class User {
     @OneToMany(mappedBy = "recepient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> receivedReviews;
 
-    public User(String email, String firstName, String lastName, String password, Role role, String gender, String phone, Address address, LocalDate birthDate){
+    public User(
+            String email,
+            String firstName,
+            String lastName,
+            String password,
+            Role role,
+            String gender,
+            String phone,
+            Address address,
+            LocalDate birthDate,
+            String profileImageUrl
+            ){
         this.email=email;
         this.firstName=firstName;
         this.lastName=lastName;
@@ -56,6 +67,7 @@ public class User {
         this.phone=phone;
         this.address=address;
         this.birthDate=birthDate;
+        this.profileImageUrl=profileImageUrl;
     }
 
     //@OneToMany(mappedBy = "user")

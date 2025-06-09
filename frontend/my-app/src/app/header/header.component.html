@@ -2,7 +2,10 @@
   <h1>Sports Marketplace</h1>
   <nav class="nav-links">
     <ng-container *ngIf="user; else guestLinks">
-      <span class="welcome">Welcome, {{ user.firstName }}</span>
+      <div class="user-info">
+        <img [src]="user.imageUrl" alt="image" class="profile-img" />
+        <span class="welcome">Welcome, {{ user.firstName }}</span>
+      </div>
       <secondary-button text="Logout" (click)="logout()" class="nav-btn"></secondary-button>
     </ng-container>
 
