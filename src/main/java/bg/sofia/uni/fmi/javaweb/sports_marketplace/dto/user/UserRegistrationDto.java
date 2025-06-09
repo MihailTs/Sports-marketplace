@@ -1,16 +1,27 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressCreateDto;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record UserRegistrationDto(
+        @NotBlank
+        @Email
         String email,
+        @NotBlank
         String firstName,
+        @NotBlank
         String lastName,
         LocalDate birthdate,
+        @NotBlank
         String password,
+        @NotBlank
         String confirmPassword,
-        String phone,
+        Role role,
         String gender,
-        String role
+        String phoneNumber,
+        AddressCreateDto addressCreateDto
 ) {}

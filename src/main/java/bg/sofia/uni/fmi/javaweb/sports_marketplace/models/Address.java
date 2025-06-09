@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "address")
@@ -13,27 +14,23 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Getter
-    @Setter
     private String street;
-    @Getter
-    @Setter
+
     private String city;
-    @Getter
-    @Setter
+
     private String state;
-    @Getter
-    @Setter
+
+    @Column(name = "zip_code")
     private String zipCode;
-    @Getter
-    @Setter
+
     private String country;
 
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> user;
+    //@Column(name = "user_id")
+    //@OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<User> user;
 
     @Override
     public boolean equals(Object o){

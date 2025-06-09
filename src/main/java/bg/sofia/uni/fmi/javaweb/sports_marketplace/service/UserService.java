@@ -4,13 +4,13 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressCreateDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.address.AddressDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.EmailAlreadyExistsException;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.PasswordMismatchException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.WrongEmailOrPasswordException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Address;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.AddressRepository;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.*;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,28 +19,39 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
+import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final AddressRepository addressRepository;
+    private final EventParticipantRepository eventParticipantRepository;
+    private final ForumPostRepository forumPostRepository;
+    private final ForumCommentRepository forumCommentRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository){
-        this.userRepository = userRepository;
-        this.encoder = encoder;
-        this.addressRepository = addressRepository;
+    public UserService(UserRepository userRepository, PasswordEncoder encoder, AddressRepository addressRepository, EventParticipantRepository eventParticipantRepository, ForumPostRepository forumPostRepository, ForumCommentRepository forumCommentRepository, EventRepository eventRepository){
+        this.userRepository=userRepository;
+        this.encoder=encoder;
+        this.addressRepository=addressRepository;
+        this.eventParticipantRepository=eventParticipantRepository;
+        this.forumCommentRepository=forumCommentRepository;
+        this.forumPostRepository=forumPostRepository;
+        this.eventRepository=eventRepository;
     }
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id){
+    public Optional<User> getUserById(UUID id){
         return userRepository.findById(id);
     }
 
@@ -61,43 +72,30 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())));
+                user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
     }
 
-    public User register(String firstName, String lastName, String email, String password, String confirmPassword,
-                         LocalDate birthdate, String phone, String gender, String role) {
-
-        if (userRepository.findByEmail(email).isPresent()) {
+    public User register(String firstName, String lastName, String email, String password, String confirmPassword, Role role, String gender, String phoneNumber, AddressCreateDto addressDto, LocalDate birthDate){
+        if(userRepository.findByEmail(email).isPresent()){
             throw new EmailAlreadyExistsException(email);
         }
-
-        if (!password.equals(confirmPassword)) {
-            throw new WrongEmailOrPasswordException();
+        else if(!password.equals(confirmPassword)){
+            throw new PasswordMismatchException();
         }
-
-        String encodedPassword = encoder.encode(password);
-        String userRole = (role == null || role.isBlank()) ? "user" : role;
-
-        User user = new User(
-                email,
-                encodedPassword,
-                firstName,
-                lastName,
-                birthdate,
-                phone,
-                gender,
-                userRole
-        );
+        User user = new User(email, firstName, lastName, encoder.encode(password), role, gender, phoneNumber, addressDto!=null?AddressCreateDto.toEntity(addressDto):null, birthDate);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Optional<User> user){
         if(user.isEmpty()){
             throw new UserDoesntExistException();
@@ -105,6 +103,12 @@ public class UserService implements UserDetailsService {
         if(user.get().getAddress()!=null&&userRepository.countByAddress(user.get().getAddress())==1){
             addressRepository.delete(user.get().getAddress());
         }
+
+        forumPostRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        forumCommentRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        eventParticipantRepository.deleteAllByUserId(user.get().getId());
+        eventRepository.updateUserToDeleted(user.get().getId(), UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
         userRepository.delete(user.get());
     }
 
@@ -120,11 +124,12 @@ public class UserService implements UserDetailsService {
             userToChange.setFirstName(userDto.firstName());
         }
         if(userDto.phoneNumber()!=null){
-            userToChange.setPhoneNumber(userDto.phoneNumber());
+            userToChange.setPhone(userDto.phoneNumber());
         }
         if(userDto.gender()!=null){
             userToChange.setGender(userDto.gender());
         }
+        userToChange.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(userToChange);
     }
 
@@ -157,11 +162,10 @@ public class UserService implements UserDetailsService {
             if (addressDto.city() != null) {
                 oldAddress.setCity(addressDto.city());
             }
-            addressRepository.save(oldAddress);
+            user.setAddress(oldAddress);
         } else {
             Address nextAddress = AddressDto.toEntity(addressDto);
             user.setAddress(nextAddress);
-            addressRepository.save(nextAddress);
         }
     }
 }
