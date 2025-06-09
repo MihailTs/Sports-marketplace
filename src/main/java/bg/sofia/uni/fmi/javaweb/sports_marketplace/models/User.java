@@ -40,7 +40,7 @@ public class User {
     private String profileImageUrl;
 
     @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="address")
+    @JoinColumn(name="address_id")
     private Address address;
 
     @OneToMany(mappedBy = "recepient", cascade = CascadeType.ALL, orphanRemoval = true)

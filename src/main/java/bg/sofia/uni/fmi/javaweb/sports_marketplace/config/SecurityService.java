@@ -39,5 +39,4 @@ public class SecurityService {
         return forumPost.getUser().getEmail().equals(email);
     }
 
-
 }
