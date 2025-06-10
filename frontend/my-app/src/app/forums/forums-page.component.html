@@ -1,0 +1,10 @@
+<div class="forums-page">
+  <h1>Current forums</h1>
+  <div class="forums-list">
+    <forum
+      *ngFor="let forum of forums"
+      [forumContent]="forum"
+      class="forum-item"
+    ></forum>
+  </div>
+</div>
