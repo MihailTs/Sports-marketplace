@@ -1,0 +1,17 @@
+<header class="app-header">
+  <h1>Sports Marketplace</h1>
+  <nav class="nav-links">
+    <ng-container *ngIf="user; else guestLinks">
+      <div class="user-info">
+        <img [src]="user.imageUrl" alt="image" class="profile-img" />
+        <span class="welcome">Welcome, {{ user.firstName }}</span>
+      </div>
+      <secondary-button text="Logout" (click)="logout()" class="nav-btn"></secondary-button>
+    </ng-container>
+
+    <ng-template #guestLinks>
+      <secondary-button text="Login" routerLink="/login" class="nav-btn"></secondary-button>
+      <primary-button text="Register" routerLink="/register" class="nav-btn"></primary-button>
+    </ng-template>
+  </nav>
+</header>

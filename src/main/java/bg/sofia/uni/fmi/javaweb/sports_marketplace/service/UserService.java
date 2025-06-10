@@ -7,7 +7,6 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.EmailAlreadyExists
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.PasswordMismatchException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.WrongEmailOrPasswordException;
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.*;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.*;
 import jakarta.transaction.Transactional;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,8 +62,8 @@ public class UserService implements UserDetailsService {
     }
 
     public User login(String email, String password){
-        Optional<User> user=userRepository.findByEmail(email);
-        if(user.isEmpty()||!encoder.matches(password, user.get().getPassword())){
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty() || !encoder.matches(password, user.get().getPassword())){
             throw new WrongEmailOrPasswordException();
         }
         return user.get();
@@ -81,14 +79,25 @@ public class UserService implements UserDetailsService {
                 user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
     }
 
-    public User register(String firstName, String lastName, String email, String password, String confirmPassword, Role role, String gender, String phoneNumber, AddressCreateDto addressDto, LocalDate birthDate){
+    public User register(String firstName, String lastName, String email, String password, String confirmPassword, Role role, String gender, String phoneNumber, String imageUrl, AddressCreateDto addressDto, LocalDate birthDate){
         if(userRepository.findByEmail(email).isPresent()){
             throw new EmailAlreadyExistsException(email);
         }
         else if(!password.equals(confirmPassword)){
             throw new PasswordMismatchException();
         }
-        User user = new User(email, firstName, lastName, encoder.encode(password), role, gender, phoneNumber, addressDto!=null?AddressCreateDto.toEntity(addressDto):null, birthDate);
+        User user = new User(
+                email,
+                firstName,
+                lastName,
+                encoder.encode(password),
+                role,
+                gender,
+                phoneNumber,
+                addressDto != null? AddressCreateDto.toEntity(addressDto) : null,
+                birthDate,
+                imageUrl
+        );
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
