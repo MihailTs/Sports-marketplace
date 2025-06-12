@@ -34,7 +34,7 @@ public class ForumController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedResponse<ForumDto>> getAllForums(@PageableDefault(size=10, sort="updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<PagedResponse<ForumDto>> getAllForums(@PageableDefault(size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.ok(PagedResponse.fromPage(forumService.getAllForums(pageable), ForumDto::fromEntity));
     }
 
@@ -51,7 +51,7 @@ public class ForumController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.ok(PagedResponse.fromPage(forumPostService.getAllForumPosts(id, pageable), ForumPostDto::fromEntity));
     }
 

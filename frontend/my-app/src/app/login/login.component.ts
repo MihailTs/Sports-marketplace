@@ -7,8 +7,8 @@ import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
 import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
 import { TextBoxComponent } from '../../text-input/text-box.component';
 import { FormComponent } from '../../form/form.component';
-import { AuthService } from '../auth/auth.service';
-import {AuthStateService} from '../state-services/authState.service';
+import { AuthService } from '../services/auth/auth.service';
+import {AuthStateService} from '../services/state-services/authState.service';
 
 @Component({
   selector: 'app-login',

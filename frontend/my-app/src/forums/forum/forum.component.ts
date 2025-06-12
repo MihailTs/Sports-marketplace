@@ -1,26 +1,13 @@
 import { Component, Input } from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
-
-export interface Sport {
-  id: string;
-  name: string;
-}
+import {Forum} from '../../app/services/forum.service';
 
 export interface ForumPost {
   id: string;
   content: string;
   createdAt: string;
   authorName: string;
-}
-
-export interface Forum {
-  title: string;
-  description: string;
-  sport: Sport;
-  createdAt: string;
-  updatedAt: string;
-  forumPosts: ForumPost[];
 }
 
 @Component({

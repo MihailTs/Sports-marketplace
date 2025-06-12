@@ -45,7 +45,6 @@ public class ForumPostService {
     public ForumPost createForumPost(UUID forumId, ForumPostCreationDto forumPostCreationDto, String email){
         Forum forum=forumRepository.findById(forumId).orElseThrow(NoSuchForumException::new);
         User user=userRepository.findByEmail(email).orElseThrow(UserDoesntExistException::new);
-        forum.setUpdatedAt(LocalDateTime.now());
         ForumPost forumPost= forumPostRepository.save(new ForumPost(forum, user, forumPostCreationDto.title(), forumPostCreationDto.content()));
         forumPost.setCreatedAt(LocalDateTime.now());
         forumPost.setUpdatedAt(LocalDateTime.now());

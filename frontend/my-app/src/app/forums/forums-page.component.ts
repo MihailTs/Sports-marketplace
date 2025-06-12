@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Forum, ForumComponent} from '../../forums/forum/forum.component';
+import { ForumComponent } from '../../forums/forum/forum.component';
+import {Forum, ForumService} from '../services/forum.service';
 
 @Component({
   selector: 'forums-page',
@@ -9,31 +10,37 @@ import {Forum, ForumComponent} from '../../forums/forum/forum.component';
   styleUrls: ['./forums-page.component.css'],
   imports: [CommonModule, ForumComponent]
 })
-export class ForumsPageComponent {
-  forums: Forum[] = [
-    {
-      title: 'Football Discussions',
-      description: 'Talk about all things football.',
-      sport: { id: '1', name: 'Football' },
-      createdAt: '2024-01-01T12:00:00Z',
-      updatedAt: '2024-01-03T09:00:00Z',
-      forumPosts: []
-    },
-    {
-      title: 'Basketball Talk',
-      description: 'NBA, Euroleague and more.',
-      sport: { id: '2', name: 'Basketball' },
-      createdAt: '2024-02-10T15:00:00Z',
-      updatedAt: '2024-02-12T18:30:00Z',
-      forumPosts: []
-    },
-    {
-      title: 'Tennis Fans',
-      description: 'Wimbledon, US Open, and beyond.',
-      sport: { id: '3', name: 'Tennis' },
-      createdAt: '2024-03-01T09:30:00Z',
-      updatedAt: '2024-03-05T11:45:00Z',
-      forumPosts: []
+export class ForumsPageComponent implements OnInit {
+  forums: Forum[] = [];
+  currentPage: number = 0;
+  totalPages: number = 0;
+  loading = true;
+
+  constructor(private forumService: ForumService) {}
+
+  ngOnInit(): void {
+    this.loadForums(this.currentPage);
+  }
+
+  loadForums(page: number): void {
+    this.loading = true;
+    this.forumService.getAllForums(page).subscribe({
+      next: (response) => {
+        this.forums = response.content;
+        this.totalPages = response.totalPages;
+        this.currentPage = response.page;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load forums:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.loadForums(page);
     }
-  ];
+  }
 }

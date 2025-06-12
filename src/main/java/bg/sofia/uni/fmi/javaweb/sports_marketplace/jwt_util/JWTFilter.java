@@ -1,4 +1,5 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util;
+
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.UserService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -8,17 +9,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private JWTUtil jwtUtil;
 
@@ -28,8 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-
-        System.out.println("JWTFilter path = " + request.getRequestURI());
+        System.out.println("JWTFilter path = " + path);
 
         if (path.startsWith("/api/users/auth/")) {
             System.out.println("Skipping JWT filter for: " + path);
@@ -51,8 +55,14 @@ public class JWTFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userService.loadUserByUsername(email);
 
                 if (jwtUtil.isTokenValid(token, userDetails)) {
+                    String role = jwtUtil.extractRole(token); // NEW: extract role from token
+                    List<SimpleGrantedAuthority> authorities = List.of(
+                            new SimpleGrantedAuthority("ROLE_" + role)
+                    );
+
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     throw new JwtException("Invalid token");

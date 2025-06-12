@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthStateService, AuthUser } from '../app/state-services/authState.service';
+import { AuthStateService, AuthUser } from '../app/services/state-services/authState.service';
 import { SecondaryButtonComponent } from '../buttons/secondary-button.component';
 import { PrimaryButtonComponent } from '../buttons/primary-button.component';
 import { RouterModule } from '@angular/router';
