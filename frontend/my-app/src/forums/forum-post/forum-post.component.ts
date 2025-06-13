@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {DatePipe} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {ForumPost} from '../../app/services/forum-posts.service';
 
@@ -7,20 +7,9 @@ import {ForumPost} from '../../app/services/forum-posts.service';
   selector: 'forum-post',
   standalone: true,
   templateUrl: './forum-post.component.html',
-  imports: [
-    DatePipe,
-    RouterLink
-  ],
+  imports: [CommonModule],
   styleUrls: ['./forum-post.component.css']
 })
 export class ForumPostComponent {
   @Input() postContent!: ForumPost;
-  @Input() routerLink?: string | any[];
-
-  constructor(private router: Router) {}
-
-  goToPost() {
-    this.router.navigate(['/forums/post', this.postContent.id]);
-  }
-
 }

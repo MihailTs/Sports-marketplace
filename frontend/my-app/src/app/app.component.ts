@@ -10,6 +10,7 @@ import {HomeComponent} from './home/home.component';
 import {FooterComponent} from '../footer/footer.component';
 import {HeaderComponent} from '../header/header.component';
 import {AuthStateService} from './services/state-services/authState.service';
+import {SingleForumComponent} from './forums/single-forum.component';
 
 @Component({
   selector: 'app-root',

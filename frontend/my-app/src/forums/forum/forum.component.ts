@@ -7,10 +7,6 @@ import {Forum} from '../../app/services/forum.service';
   selector: 'forum',
   standalone: true,
   templateUrl: './forum.component.html',
-  imports: [
-    DatePipe,
-    RouterLink
-  ],
   styleUrls: ['./forum.component.css']
 })
 export class ForumComponent {
