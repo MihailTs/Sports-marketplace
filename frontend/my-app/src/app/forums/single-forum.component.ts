@@ -5,6 +5,10 @@ import {ForumComment, ForumCommentsService} from '../services/forum-comment.serv
 import {CommonModule, NgFor, NgIf} from '@angular/common';
 import {ForumPostComponent} from '../../forums/forum-post/forum-post.component';
 import {ForumCommentComponent} from '../../forums/forum-comment/forum-comment.component';
+import {AuthStateService, AuthUser} from '../services/state-services/authState.service';
+import {FormsModule} from '@angular/forms';
+import {PrimaryButtonComponent} from '../../buttons/primary-button.component';
+import {TextBoxComponent} from '../../text-input/text-box.component';
 
 @Component({
   selector: 'single-forum',
@@ -14,7 +18,10 @@ import {ForumCommentComponent} from '../../forums/forum-comment/forum-comment.co
   imports: [
     CommonModule,
     ForumPostComponent,
-    ForumCommentComponent
+    ForumCommentComponent,
+    FormsModule,
+    PrimaryButtonComponent,
+    TextBoxComponent
   ]
 })
 export class SingleForumComponent implements OnInit {
@@ -25,11 +32,56 @@ export class SingleForumComponent implements OnInit {
   loadingPosts = true;
   loadingComments = false;
 
+  newPost: { title: string; userId: string | undefined; content: string } = { title: '',  userId: '', content: '' };
+  newCommentContent = '';
+  posting = false;
+  commenting = false;
+  user: AuthUser | null = null;
+
   constructor(
+    private authState: AuthStateService,
     private route: ActivatedRoute,
     private forumPostsService: ForumPostsService,
     private forumCommentsService: ForumCommentsService
-  ) {}
+  ) {
+    this.authState.user$.subscribe(user => {
+    this.user = user;
+  });
+
+    this.authState.loadUserFromStorage();
+  }
+
+  addPost(): void {
+    if (!this.newPost.title || !this.newPost.content) return;
+    this.posting = true;
+    this.forumPostsService.createPost(this.forumId, this.newPost).subscribe({
+      next: (createdPost) => {
+        this.posts.unshift(createdPost);
+        this.newPost = { title: this.newPost.title, userId: this.user?.id, content: this.newPost.content };
+        this.posting = false;
+      },
+      error: (err) => {
+        console.error('Failed to add post:', err);
+        this.posting = false;
+      }
+    });
+  }
+
+  addComment(): void {
+    if (!this.newCommentContent || !this.selectedPost) return;
+    this.commenting = true;
+    this.forumCommentsService.createComment(this.forumId, this.selectedPost.id, { content: this.newCommentContent }).subscribe({
+      next: (createdComment) => {
+        this.comments.push(createdComment);
+        this.newCommentContent = '';
+        this.commenting = false;
+      },
+      error: (err) => {
+        console.error('Failed to add comment:', err);
+        this.commenting = false;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {

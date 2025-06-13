@@ -24,4 +24,13 @@ export class ForumPostsService {
 
     return this.http.get<PagedResponse<ForumPost>>(`${this.apiUrl}/api/forums/${forumId}/posts`, { params });
   }
+
+  createPost(forumId: string, post: {
+    title: string;
+    userId: string | undefined;
+    content: string
+  }): Observable<ForumPost> {
+    return this.http.post<ForumPost>(`${this.apiUrl}/api/forums/${forumId}/posts`, post);
+  }
+
 }

@@ -18,4 +18,12 @@ export class ForumCommentsService {
       `/api/forums/${forumId}/posts/${postId}/comments`
     );
   }
+
+  createComment(forumId: string, postId: string, comment: { content: string }): Observable<ForumComment> {
+    return this.http.post<ForumComment>(
+      `/api/forums/${forumId}/posts/${postId}/comments`,
+      comment
+    );
+  }
+
 }

@@ -1,4 +1,11 @@
 <div class="forum-page">
+  <div class="add-post-form card">
+    <h4>Add a New Post</h4>
+    <text-box [(ngModel)]="newPost.title" label="" placeholder="Post Title" class="input-field" />
+    <textarea [(ngModel)]="newPost.content" placeholder="Post Content" class="textarea-field"></textarea>
+    <primary-button (click)="addPost()" text="Submit Post" class="submit-button"/>
+  </div>
+
   <div class="forum-container">
     <div class="forum-posts-list">
       <forum-post
@@ -8,12 +15,21 @@
         (click)="selectPost(post)"
       ></forum-post>
     </div>
+
     <div class="forum-comments-panel">
-      <forum-comment
-        *ngFor="let comment of comments"
-        [comment]="comment"
-        class="forum-comment"
-      ></forum-comment>
+      <ng-container *ngIf="selectedPost">
+        <div class="add-comment-form card">
+          <h4>Add a Comment to "{{ selectedPost.title }}"</h4>
+          <textarea [(ngModel)]="newCommentContent" placeholder="Write a comment..." class="textarea-field"></textarea>
+          <primary-button (click)="addComment()" text="Submit comment" class="submit-button"/>
+        </div>
+
+        <forum-comment
+          *ngFor="let comment of comments"
+          [comment]="comment"
+          class="forum-comment"
+        ></forum-comment>
+      </ng-container>
     </div>
   </div>
 </div>

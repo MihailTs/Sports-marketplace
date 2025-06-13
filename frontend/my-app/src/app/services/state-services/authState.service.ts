@@ -1,9 +1,8 @@
-// src/app/services/auth-state.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export interface AuthUser {
-  id: number;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -41,6 +40,5 @@ export class AuthStateService {
   get currentUser(): AuthUser | null {
     return this.userSubject.value;
   }
-
 
 }
