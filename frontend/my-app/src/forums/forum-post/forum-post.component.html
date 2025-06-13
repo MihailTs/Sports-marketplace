@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="forum-post-container" (click)="goToPost()">
+  <h2>{{ postContent.title }}</h2>
+  <p class="author">Author: {{ postContent.userName }}</p>
+  <p class="content">{{ postContent.content }}</p>
+</div>

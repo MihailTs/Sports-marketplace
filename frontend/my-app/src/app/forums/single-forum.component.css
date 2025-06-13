@@ -1,0 +1,24 @@
+.forum-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.forum-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.forum-post {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.forum-post:hover {
+  transform: scale(1.01);
+}

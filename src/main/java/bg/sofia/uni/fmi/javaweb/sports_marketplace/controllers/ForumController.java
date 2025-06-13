@@ -52,6 +52,7 @@ public class ForumController {
 
     @GetMapping("/{id}/posts")
     public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
+        System.out.println(ResponseEntity.ok(PagedResponse.fromPage(forumPostService.getAllForumPosts(id, pageable), ForumPostDto::fromEntity)));
         return ResponseEntity.ok(PagedResponse.fromPage(forumPostService.getAllForumPosts(id, pageable), ForumPostDto::fromEntity));
     }
 

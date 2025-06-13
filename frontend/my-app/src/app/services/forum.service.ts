@@ -26,7 +26,6 @@ export class ForumService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    console.log(localStorage.getItem('token'));
     return this.http.get<PagedResponse<Forum>>(`${this.apiUrl}/api/forums`, { params });
   }
 }

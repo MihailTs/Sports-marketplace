@@ -1,0 +1,9 @@
+<div class="forum-page">
+  <div class="forum-posts-list">
+    <forum-post
+      *ngFor="let post of posts"
+      [postContent]="post"
+      class="forum-post"
+    ></forum-post>
+  </div>
+</div>
