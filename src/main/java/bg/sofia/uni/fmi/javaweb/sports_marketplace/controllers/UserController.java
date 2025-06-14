@@ -71,7 +71,8 @@ public class UserController {
                 user.getId(),
                 user.getEmail(),
                 user.getFirstName(),
-                user.getLastName()
+                user.getLastName(),
+                user.getProfileImageUrl()
         );
 
         return ResponseEntity.ok(response);

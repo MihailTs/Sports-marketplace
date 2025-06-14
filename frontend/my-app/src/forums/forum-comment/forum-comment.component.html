@@ -1,0 +1,9 @@
+<div class="comment-card">
+  <div class="comment-header">
+    <strong>{{ comment.userName }}</strong>
+    <span class="date">{{ comment.createdAt | date:'short' }}</span>
+  </div>
+  <div class="comment-content">
+    {{ comment.content }}
+  </div>
+</div>

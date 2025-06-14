@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
 import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
 import { TextBoxComponent } from '../../text-input/text-box.component';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-register',

@@ -7,8 +7,10 @@ import {TextAreaComponent} from '../text-input/text-area.component';
 import {ToggleButtonComponent} from '../buttons/toggle-button.component';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
-import {FooterComponent} from './footer/footer.component';
-import {HeaderComponent} from './header/header.component';
+import {FooterComponent} from '../footer/footer.component';
+import {HeaderComponent} from '../header/header.component';
+import {AuthStateService} from './services/state-services/authState.service';
+import {SingleForumComponent} from './forums/single-forum.component';
 
 @Component({
   selector: 'app-root',
@@ -31,10 +33,11 @@ export class AppComponent {
   title = 'Sports-marketplace';
   hideHeader: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authState: AuthStateService) {
     this.router.events.subscribe(() => {
       const hiddenRoutes = ['/login', '/register'];
       this.hideHeader = hiddenRoutes.includes(this.router.url);
     });
+    this.authState.loadUserFromStorage();
   }
 }
