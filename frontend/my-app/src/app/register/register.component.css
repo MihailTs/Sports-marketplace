@@ -88,3 +88,12 @@ p {
   color: #555;
   font-size: 0.95rem;
 }
+
+.image-preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+}

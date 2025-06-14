@@ -25,11 +25,12 @@ export class RegisterComponent {
   registerForm: FormGroup;
   isSubmitting = false;
   errorMessage = '';
+  pictureUrlValue: string = '';
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService // ✅ Use AuthService
+    private authService: AuthService
   ) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -41,6 +42,7 @@ export class RegisterComponent {
       phone: ['', Validators.pattern(/^\+?[\d\s\-\(\)]+$/)],
       gender: ['', Validators.required],
       address: ['', Validators.required],
+      pictureUrl: [''],
       role: ['user']
     }, { validators: this.passwordsMatchValidator });
   }
@@ -51,7 +53,16 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { passwordsMismatch: true };
   }
 
-  getFieldError(fieldName: string): string {
+  onPictureUrlChange() {
+    const url = this.registerForm.get('pictureUrl')?.value;
+    this.pictureUrlValue = url;
+  }
+
+  onImageError() {
+    this.pictureUrlValue = '';
+  }
+
+    getFieldError(fieldName: string): string {
     const field = this.registerForm.get(fieldName);
     if (field?.touched && field?.errors) {
       if (field.errors['required']) return `${fieldName} is required`;

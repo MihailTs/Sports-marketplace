@@ -20,6 +20,7 @@ public record UserRegistrationDto(
         String password,
         @NotBlank
         String confirmPassword,
+        String imageUrl,
         Role role,
         String gender,
         String phoneNumber,
