@@ -1,7 +1,7 @@
 <div class="forum-page">
   <div class="add-post-form card">
     <h4>Add a New Post</h4>
-    <text-box [(ngModel)]="newPost.title" label="" placeholder="Post Title" class="input-field" />
+    <input [(ngModel)]="newPost.title" placeholder="Post Title" class="input-field" />
     <textarea [(ngModel)]="newPost.content" placeholder="Post Content" class="textarea-field"></textarea>
     <primary-button (click)="addPost()" text="Submit Post" class="submit-button"/>
   </div>
