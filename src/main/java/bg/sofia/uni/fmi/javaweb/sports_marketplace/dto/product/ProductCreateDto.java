@@ -27,6 +27,7 @@ public record ProductCreateDto(
     UUID categoryId,
     @Valid
     List<ProductVariantDto> variants,
+    @Size(max = 25)
     List<@URL String> imageUrls
 ) {}
 

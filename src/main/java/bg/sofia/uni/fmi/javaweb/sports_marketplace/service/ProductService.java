@@ -3,6 +3,7 @@ package bg.sofia.uni.fmi.javaweb.sports_marketplace.service;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.*;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.NoSuchProductException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.NoSuchCategoryException;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.TooManyProductImagesException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.*;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.*;
@@ -129,6 +130,10 @@ public class ProductService {
     @Transactional
     public ProductImage addProductImage(UUID productId, String imageUrl, Boolean isPrimary) {
         Product product = getProductById(productId);
+        
+        if (product.getImages().size() >= 25) {
+            throw new TooManyProductImagesException(productId);
+        }
         
         if (isPrimary) {
             // Reset primary flag for all existing images
