@@ -163,10 +163,67 @@
 			]
 		},
 		{
-			"name": "Listings",
+			"name": "Products",
 			"item": [
 				{
-					"name": "postListings",
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products?status=AVAILABLE&page=0&size=20",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products"],
+							"query": [
+								{
+									"key": "status",
+									"value": "AVAILABLE",
+									"description": "Filter by product status (AVAILABLE, SOLD, RESERVED, UNAVAILABLE)",
+									"required": false
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Page number (0-based)",
+									"required": false
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "Page size",
+									"required": false
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/:id",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -178,7 +235,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"Wilson Basketball\",\r\n  \"description\": \"Lightly used, great for casual games.\",\r\n  \"price\": 30,\r\n  \"condition\": \"Good\",\r\n  \"photos\": [\r\n    \"https://example.com/image1.jpg\"\r\n  ],\r\n  \"sport\": \"Basketball\",\r\n  \"location\": \"New York\",\r\n  \"pricingOption\": \"Fixed\",\r\n  \"sellerId\": \"user567\"\r\n}\r\n\r\n",
+							"raw": "{\n  \"name\": \"Tennis Racket Pro\",\n  \"description\": \"Professional grade tennis racket\",\n  \"price\": 199.99,\n  \"condition\": \"NEW\",\n  \"categoryId\": \"uuid-here\",\n  \"variants\": [\n    {\n      \"size\": \"Standard\",\n      \"color\": \"Black/Red\",\n      \"price\": 199.99,\n      \"stock\": 10\n    }\n  ],\n  \"imageUrls\": [\n    \"https://example.com/tennis-racket.jpg\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -186,63 +243,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/listings",
+							"raw": "http://localhost:8080/api/products",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "8080",
-							"path": [
-								"api",
-								"listings"
-							]
+							"path": ["api", "products"]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "getListings",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/listings",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"listings"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getListing",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/listings/{listingId}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"listings",
-								"{listingId}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "changeListing",
+					"name": "Update Product",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -254,7 +265,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"Wilson NCAA Basketball\",\r\n  \"price\": 25,\r\n  \"condition\": \"Very Good\",\r\n  \"description\": \"Used only twice. Almost new.\"\r\n}\r\n",
+							"raw": "{\n  \"name\": \"Tennis Racket Pro V2\",\n  \"description\": \"Updated professional grade tennis racket\",\n  \"price\": 189.99,\n  \"condition\": \"NEW\",\n  \"categoryId\": \"uuid-here\",\n  \"variants\": [\n    {\n      \"size\": \"Standard\",\n      \"color\": \"Black/Gold\",\n      \"price\": 189.99,\n      \"stock\": 15\n    }\n  ],\n  \"imageUrls\": [\n    \"https://example.com/tennis-racket-v2.jpg\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -262,29 +273,141 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/listings/{listingId}",
+							"raw": "http://localhost:8080/api/products/:id",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "8080",
-							"path": [
-								"api",
-								"listings",
-								"{listingId}"
+							"path": ["api", "products", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "deleteListing",
+					"name": "Delete Product",
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/:id",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/search?query=tennis&status=AVAILABLE&page=0&size=20",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "tennis",
+									"description": "Search term",
+									"required": true
+								},
+								{
+									"key": "status",
+									"value": "AVAILABLE",
+									"description": "Filter by product status",
+									"required": false
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Page number (0-based)",
+									"required": false
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "Page size",
+									"required": false
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/category/:categoryId?status=AVAILABLE&page=0&size=20",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", "category", ":categoryId"],
+							"query": [
+								{
+									"key": "status",
+									"value": "AVAILABLE",
+									"description": "Filter by product status",
+									"required": false
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Page number (0-based)",
+									"required": false
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "Page size",
+									"required": false
+								}
+							],
+							"variable": [
+								{
+									"key": "categoryId",
+									"value": "",
+									"description": "Category UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product Variant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n  \"size\": \"Large\",\n  \"color\": \"Blue\",\n  \"price\": 209.99,\n  \"stock\": 5\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,16 +415,138 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/listings/{listingId}",
+							"raw": "http://localhost:8080/api/products/:id/variants",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "8080",
-							"path": [
-								"api",
-								"listings",
-								"{listingId}"
+							"path": ["api", "products", ":id", "variants"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product Variant",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/:productId/variants/:variantId",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":productId", "variants", ":variantId"],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "",
+									"description": "Product UUID"
+								},
+								{
+									"key": "variantId",
+									"value": "",
+									"description": "Variant UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"url\": \"https://example.com/new-image.jpg\",\n  \"isPrimary\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/:id/images",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":id", "images"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product Image",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/:productId/images/:imageId",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":productId", "images", ":imageId"],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "",
+									"description": "Product UUID"
+								},
+								{
+									"key": "imageId",
+									"value": "",
+									"description": "Image UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/:id/status?status=SOLD",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "products", ":id", "status"],
+							"query": [
+								{
+									"key": "status",
+									"value": "SOLD",
+									"description": "New product status (AVAILABLE, SOLD, RESERVED, UNAVAILABLE)",
+									"required": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Product UUID"
+								}
 							]
 						}
 					},

@@ -7,46 +7,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "review")
+@Table(name = "product_image")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewee_id")
-    private User reviewee;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String url;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer rating;
-
-    @Column(columnDefinition = "TEXT")
-    private String comment;
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-}
+    @Column(name = "is_primary")
+    private Boolean isPrimary;
+} 
