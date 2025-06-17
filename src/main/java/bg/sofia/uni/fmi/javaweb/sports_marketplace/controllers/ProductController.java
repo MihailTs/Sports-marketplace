@@ -87,7 +87,7 @@ public class ProductController {
     @PreAuthorize("@productSecurityService.isProductOwner(#id, authentication.name) or hasRole('ADMIN')")
     public ResponseEntity<ProductVariantDto> addProductVariant(
             @PathVariable UUID id,
-            @Valid @RequestBody ProductVariantCreateDto variantDto) {
+            @Valid @RequestBody ProductVariantDto variantDto) {
         ProductVariant variant = productService.addProductVariant(id, variantDto);
         return ResponseEntity.ok(ProductVariantDto.fromEntity(variant));
     }

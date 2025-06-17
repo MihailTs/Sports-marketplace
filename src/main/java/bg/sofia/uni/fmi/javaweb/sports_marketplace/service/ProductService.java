@@ -69,13 +69,9 @@ public class ProductService {
         product = productRepository.save(product);
 
         if (productCreateDto.variants() != null) {
-            for (ProductVariantCreateDto variantDto : productCreateDto.variants()) {
-                ProductVariant variant = new ProductVariant();
+            for (ProductVariantDto variantDto : productCreateDto.variants()) {
+                ProductVariant variant = variantDto.toEntity();
                 variant.setProduct(product);
-                variant.setSize(variantDto.size());
-                variant.setColor(variantDto.color());
-                variant.setPrice(variantDto.price());
-                variant.setStock(variantDto.stock());
                 product.getVariants().add(variant);
             }
         }
@@ -118,15 +114,11 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductVariant addProductVariant(UUID productId, ProductVariantCreateDto variantDto) {
+    public ProductVariant addProductVariant(UUID productId, ProductVariantDto variantDto) {
         Product product = getProductById(productId);
         
-        ProductVariant variant = new ProductVariant();
+        ProductVariant variant = variantDto.toEntity();
         variant.setProduct(product);
-        variant.setSize(variantDto.size());
-        variant.setColor(variantDto.color());
-        variant.setPrice(variantDto.price());
-        variant.setStock(variantDto.stock());
         
         product.getVariants().add(variant);
         productRepository.save(product);

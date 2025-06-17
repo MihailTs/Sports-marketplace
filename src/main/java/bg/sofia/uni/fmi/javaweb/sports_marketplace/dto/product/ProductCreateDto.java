@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.ProductCondition;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -20,8 +21,8 @@ public record ProductCreateDto(
     @NotNull
     @DecimalMin("0.0")
     BigDecimal price,
-    @NotBlank
-    String condition,
+    @NotNull
+    ProductCondition condition,
     @NotNull
     UUID categoryId,
     @Valid

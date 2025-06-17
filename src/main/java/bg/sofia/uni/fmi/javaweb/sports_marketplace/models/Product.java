@@ -47,8 +47,8 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
     
-    
-    private String condition;
+    @Enumerated(EnumType.STRING)
+    private ProductCondition condition;
     
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
