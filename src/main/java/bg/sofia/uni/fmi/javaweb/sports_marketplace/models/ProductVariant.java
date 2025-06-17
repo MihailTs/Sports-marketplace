@@ -7,46 +7,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "review")
+@Table(name = "product_variant")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewee_id")
-    private User reviewee;
-
+    
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer rating;
+    private String size;
+    private String color;
 
-    @Column(columnDefinition = "TEXT")
-    private String comment;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-}
+    private Integer stock;
+} 
