@@ -3,7 +3,6 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="registration-form">
       <h2 class="form-title">Create an Account</h2>
 
-      <!-- Error Message Display -->
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>

@@ -4,11 +4,13 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {ForumsPageComponent} from './forums/forums-page.component';
 import {SingleForumComponent} from './forums/single-forum.component';
+import {AddProductComponent} from './products/add-product.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'add-product', component: AddProductComponent },
   {
     path: 'forums',
     children: [
