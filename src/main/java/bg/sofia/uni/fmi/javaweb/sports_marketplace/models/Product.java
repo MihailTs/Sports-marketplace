@@ -1,37 +1,48 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Category;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
+import jakarta.persistence.*;
+import lombok.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "product")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(columnDefinition = "UUID")
+    private UUID id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private User seller;
+
+    @Column(nullable = false, length = 255)
     private String name;
-    private String description;
-    private BigDecimal price;
-    private Integer stockQuantity;
-    private String imageUrl;
 
-    //@ManyToOne
-    //@JoinColumn(name = "category_id")
-    //private Category category;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Column(length = 255)
+    private String condition;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(length = 255)
+    private String status;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
