@@ -1,20 +1,17 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "review")
@@ -23,30 +20,22 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewee_id")
-    private User reviewee;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    //@ManyToOne
+    //@JoinColumn(name="user_id")
+    //private User author;
 
     private Integer rating;
-
-    @Column(columnDefinition = "TEXT")
     private String comment;
+    private LocalDateTime reviewDate;
 
-    private LocalDateTime createdAt;
+    //@ManyToOne
+    //@JoinColumn(name = "product_id")
+    //private Product product;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User recepient;
 }
