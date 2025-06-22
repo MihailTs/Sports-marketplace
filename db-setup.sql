@@ -1,206 +1,245 @@
-CREATE TABLE sport (
-  id UUID PRIMARY KEY,
-  name VARCHAR(255)
+CREATE TABLE "sport" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar(255)
 );
 
-CREATE TABLE users (
-  id UUID PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  address_id UUID,
-  password VARCHAR(255) NOT NULL,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
-  birth_date DATE,
-  phone VARCHAR(255),
-  gender varchar(2),
-  role varchar(5),
-  profile_image_url TEXT,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
-  FOREIGN KEY (address_id) REFERENCES address(id)
+CREATE TABLE "users" (
+  "id" uuid PRIMARY KEY,
+  "email" varchar(255) UNIQUE NOT NULL,
+  "password" varchar(255) NOT NULL,
+  "first_name" varchar(255) NOT NULL,
+  "last_name" varchar(255) NOT NULL,
+  "birth_date" date,
+  "phone" varchar(255),
+  "gender" varchar(2),
+  "role" varchar(5),
+  "profile_image_url" text,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE address (
-  id UUID PRIMARY KEY,
-  street VARCHAR(255),
-  zip_code VARCHAR(255),
-  city VARCHAR(255),
-  country VARCHAR(255),
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
+CREATE TABLE "address" (
+  "id" uuid PRIMARY KEY,
+  "user_id" uuid,
+  "street" varchar(255),
+  "zip_code" varchar(255),
+  "city" varchar(255),
+  "country" varchar(255),
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE category (
-  id UUID PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  sport_id UUID,
-  FOREIGN KEY (sport_id) REFERENCES sport(id)
+CREATE TABLE "category" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar(255) NOT NULL
 );
 
-CREATE TABLE product (
-  id UUID PRIMARY KEY,
-  seller_id UUID,
-  name VARCHAR(255) NOT NULL,
-  description TEXT,
-  category_id UUID,
-  condition VARCHAR(255),
-  price DECIMAL(10,2),
-  status VARCHAR(255),
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
-  FOREIGN KEY (seller_id) REFERENCES users(id),
-  FOREIGN KEY (category_id) REFERENCES category(id)
+CREATE TABLE "product" (
+  "id" uuid PRIMARY KEY,
+  "seller_id" uuid,
+  "name" varchar(255) NOT NULL,
+  "description" text,
+  "category_id" uuid,
+  "condition" varchar(255),
+  "price" decimal(10,2),
+  "status" varchar(255),
+  "sportId" varchar(255),
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE product_variant (
-  id UUID PRIMARY KEY,
-  product_id UUID,
-  size VARCHAR(255),
-  color VARCHAR(255),
-  price DECIMAL(10,2),
-  stock INT,
-  FOREIGN KEY (product_id) REFERENCES product(id)
+CREATE TABLE "product_variant" (
+  "id" uuid PRIMARY KEY,
+  "product_id" uuid,
+  "size" varchar(255),
+  "color" varchar(255),
+  "price" decimal(10,2),
+  "stock" int
 );
 
-CREATE TABLE product_image (
-  id UUID PRIMARY KEY,
-  product_id UUID,
-  url TEXT NOT NULL,
-  is_primary BOOLEAN,
-  FOREIGN KEY (product_id) REFERENCES product(id)
+CREATE TABLE "product_image" (
+  "id" uuid PRIMARY KEY,
+  "product_id" uuid,
+  "url" text NOT NULL,
+  "is_primary" boolean
 );
 
-CREATE TABLE chat (
-  id UUID PRIMARY KEY,
-  created_at TIMESTAMP
+CREATE TABLE "chat" (
+  "id" uuid PRIMARY KEY,
+  "created_at" timestamp
 );
 
-CREATE TABLE chat_participant (
-  id UUID PRIMARY KEY,
-  chat_id UUID,
-  user_id UUID,
-  FOREIGN KEY (chat_id) REFERENCES chat(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE "chat_participant" (
+  "id" uuid PRIMARY KEY,
+  "chat_id" uuid,
+  "user_id" uuid
 );
 
-CREATE TABLE message (
-  id UUID PRIMARY KEY,
-  chat_id UUID,
-  sender_id UUID,
-  content TEXT NOT NULL,
-  sent_at TIMESTAMP,
-  read_at TIMESTAMP,
-  FOREIGN KEY (chat_id) REFERENCES chat(id),
-  FOREIGN KEY (sender_id) REFERENCES users(id)
+CREATE TABLE "message" (
+  "id" uuid PRIMARY KEY,
+  "chat_id" uuid,
+  "sender_id" uuid,
+  "content" text NOT NULL,
+  "sent_at" timestamp,
+  "read_at" timestamp
 );
 
-CREATE TABLE transaction (
-  id UUID PRIMARY KEY,
-  product_id UUID,
-  buyer_id UUID,
-  seller_id UUID,
-  status VARCHAR(255),
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
-  FOREIGN KEY (product_id) REFERENCES product(id),
-  FOREIGN KEY (buyer_id) REFERENCES users(id),
-  FOREIGN KEY (seller_id) REFERENCES users(id)
+CREATE TABLE "transaction" (
+  "id" uuid PRIMARY KEY,
+  "product_id" uuid,
+  "buyer_id" uuid,
+  "seller_id" uuid,
+  "status" varchar(255),
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE review (
-  id UUID PRIMARY KEY,
-  reviewer_id UUID,
-  reviewee_id UUID,
-  product_id UUID,
-  rating INT,
-  comment TEXT,
-  created_at TIMESTAMP,
-  FOREIGN KEY (reviewer_id) REFERENCES users(id),
-  FOREIGN KEY (reviewee_id) REFERENCES users(id)
-  FOREIGN KEY (product_id) REFERENCES product(id)
+CREATE TABLE "review" (
+  "id" uuid PRIMARY KEY,
+  "reviewer_id" uuid,
+  "reviewee_id" uuid,
+  "product_id" uuid,
+  "rating" int,
+  "comment" text,
+  "created_at" timestamp
 );
 
-
-CREATE TABLE pinned_listing (
-  id UUID PRIMARY KEY,
-  user_id UUID,
-  product_id UUID,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (product_id) REFERENCES product(id)
+CREATE TABLE "pinned_listing" (
+  "id" uuid PRIMARY KEY,
+  "user_id" uuid,
+  "product_id" uuid
 );
 
-CREATE TABLE dispute (
-  id UUID PRIMARY KEY,
-  transaction_id UUID,
-  reported_by_id UUID,
-  reason TEXT,
-  status VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (transaction_id) REFERENCES transaction(id),
-  FOREIGN KEY (reported_by_id) REFERENCES users(id)
+CREATE TABLE "dispute" (
+  "id" uuid PRIMARY KEY,
+  "transaction_id" uuid,
+  "reported_by_id" uuid,
+  "reason" text,
+  "status" varchar(255),
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE dispute_message (
-  id UUID PRIMARY KEY,
-  dispute_id UUID,
-  user_id UUID,
-  content TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (dispute_id) REFERENCES dispute(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE "dispute_message" (
+  "id" uuid PRIMARY KEY,
+  "dispute_id" uuid,
+  "user_id" uuid,
+  "content" text,
+  "created_at" timestamp
 );
 
-CREATE TABLE forum (
-  id UUID PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  sport_id UUID,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (sport_id) REFERENCES sport(id)
+CREATE TABLE "forum" (
+  "id" uuid PRIMARY KEY,
+  "title" varchar(255) NOT NULL,
+  "description" text,
+  "sport_id" uuid,
+  "created_at" timestamp
 );
 
-CREATE TABLE forum_post (
-  id UUID PRIMARY KEY,
-  forum_id UUID,
-  user_id UUID,
-  title VARCHAR(255),
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (forum_id) REFERENCES forum(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE "forum_post" (
+  "id" uuid PRIMARY KEY,
+  "forum_id" uuid,
+  "user_id" uuid,
+  "title" varchar(255),
+  "content" text NOT NULL,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
-CREATE TABLE forum_comment (
-  id UUID PRIMARY KEY,
-  post_id UUID,
-  user_id UUID,
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (post_id) REFERENCES forum_post(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE "forum_comment" (
+  "id" uuid PRIMARY KEY,
+  "post_id" uuid,
+  "user_id" uuid,
+  "content" text NOT NULL,
+  "created_at" timestamp
 );
 
-CREATE TABLE event (
-  id UUID PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  location VARCHAR(255),
-  start_datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  end_datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  sport_id UUID,
-  created_by_id UUID,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (sport_id) REFERENCES sport(id),
-  FOREIGN KEY (created_by_id) REFERENCES users(id)
+CREATE TABLE "event" (
+  "id" uuid PRIMARY KEY,
+  "title" varchar(255) NOT NULL,
+  "description" text NOT NULL,
+  "location" varchar(255),
+  "start_datetime" timestamp,
+  "end_datetime" timestamp,
+  "sport_id" uuid,
+  "capacity" int,
+  "created_by_id" uuid,
+  "created_at" timestamp
 );
 
-CREATE TABLE event_participant (
-  id UUID PRIMARY KEY,
-  event_id UUID,
-  user_id UUID,
-  status VARCHAR(255),
-  FOREIGN KEY (event_id) REFERENCES event(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE "event_participant" (
+  "id" uuid PRIMARY KEY,
+  "event_id" uuid,
+  "user_id" uuid,
+  "status" varchar(255),
+  "joined_at" timestamp
 );
+
+ALTER TABLE "address" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "product" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
+
+ALTER TABLE "product" ADD FOREIGN KEY ("category_id") REFERENCES "category" ("id");
+
+ALTER TABLE "product" ADD FOREIGN KEY ("sportId") REFERENCES "sport" ("id");
+
+ALTER TABLE "product_variant" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+
+ALTER TABLE "product_image" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+
+ALTER TABLE "chat_participant" ADD FOREIGN KEY ("chat_id") REFERENCES "chat" ("id");
+
+ALTER TABLE "chat_participant" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "message" ADD FOREIGN KEY ("chat_id") REFERENCES "chat" ("id");
+
+ALTER TABLE "message" ADD FOREIGN KEY ("sender_id") REFERENCES "users" ("id");
+
+ALTER TABLE "transaction" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+
+ALTER TABLE "transaction" ADD FOREIGN KEY ("buyer_id") REFERENCES "users" ("id");
+
+ALTER TABLE "transaction" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
+
+ALTER TABLE "review" ADD FOREIGN KEY ("reviewer_id") REFERENCES "users" ("id");
+
+ALTER TABLE "review" ADD FOREIGN KEY ("reviewee_id") REFERENCES "users" ("id");
+
+ALTER TABLE "review" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+
+ALTER TABLE "pinned_listing" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "pinned_listing" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+
+ALTER TABLE "dispute" ADD FOREIGN KEY ("transaction_id") REFERENCES "transaction" ("id");
+
+ALTER TABLE "dispute" ADD FOREIGN KEY ("reported_by_id") REFERENCES "users" ("id");
+
+ALTER TABLE "dispute_message" ADD FOREIGN KEY ("dispute_id") REFERENCES "dispute" ("id");
+
+ALTER TABLE "dispute_message" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "forum" ADD FOREIGN KEY ("sport_id") REFERENCES "sport" ("id");
+
+ALTER TABLE "forum_post" ADD FOREIGN KEY ("forum_id") REFERENCES "forum" ("id");
+
+ALTER TABLE "forum_post" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "forum_comment" ADD FOREIGN KEY ("post_id") REFERENCES "forum_post" ("id");
+
+ALTER TABLE "forum_comment" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "event" ADD FOREIGN KEY ("sport_id") REFERENCES "sport" ("id");
+
+ALTER TABLE "event" ADD FOREIGN KEY ("created_by_id") REFERENCES "users" ("id");
+
+ALTER TABLE "event_participant" ADD FOREIGN KEY ("event_id") REFERENCES "event" ("id");
+
+ALTER TABLE "event_participant" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+INSERT INTO category VALUES(gen_random_uuid(), 'Apparel'), (gen_random_uuid(), 'Accessories'), (gen_random_uuid(), 'Sports equipment')
+
+INSERT INTO sport VALUES(gen_random_uuid(), 'football'), (gen_random_uuid(), 'basketball'), (gen_random_uuid(), 'tennis'),
+						(gen_random_uuid(), 'trecking'), (gen_random_uuid(), 'swimming'), (gen_random_uuid(), 'running'),
+						(gen_random_uuid(), 'volleyball'), (gen_random_uuid(), 'badminton'), (gen_random_uuid(), 'cycling'),
+						(gen_random_uuid(), 'martial arts'), (gen_random_uuid(), 'other')
