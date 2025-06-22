@@ -43,7 +43,7 @@ CREATE TABLE "product" (
   "condition" varchar(255),
   "price" decimal(10,2),
   "status" varchar(255),
-  "sportId" varchar(255),
+  "sport_id" uuid,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -181,7 +181,7 @@ ALTER TABLE "product" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
 
 ALTER TABLE "product" ADD FOREIGN KEY ("category_id") REFERENCES "category" ("id");
 
-ALTER TABLE "product" ADD FOREIGN KEY ("sportId") REFERENCES "sport" ("id");
+ALTER TABLE "product" ADD FOREIGN KEY ("sport_id") REFERENCES "sport" ("id");
 
 ALTER TABLE "product_variant" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
