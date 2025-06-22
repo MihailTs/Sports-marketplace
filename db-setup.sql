@@ -237,7 +237,7 @@ ALTER TABLE "event_participant" ADD FOREIGN KEY ("event_id") REFERENCES "event" 
 
 ALTER TABLE "event_participant" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-INSERT INTO category VALUES(gen_random_uuid(), 'Apparel'), (gen_random_uuid(), 'Accessories'), (gen_random_uuid(), 'Sports equipment')
+INSERT INTO category VALUES(gen_random_uuid(), 'Apparel'), (gen_random_uuid(), 'Accessories'), (gen_random_uuid(), 'Sports equipment');
 
 INSERT INTO sport VALUES(gen_random_uuid(), 'football'), (gen_random_uuid(), 'basketball'), (gen_random_uuid(), 'tennis'),
 						(gen_random_uuid(), 'trecking'), (gen_random_uuid(), 'swimming'), (gen_random_uuid(), 'running'),
