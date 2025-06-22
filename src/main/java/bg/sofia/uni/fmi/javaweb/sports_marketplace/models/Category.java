@@ -24,7 +24,6 @@ public class Category {
     private UUID id;
 
     private String name;
-    private UUID sportId;
 
    // @OneToMany(mappedBy = "category")
     //private List<Product> products;

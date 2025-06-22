@@ -10,8 +10,8 @@ public class ProductCreateDto {
     private String name;
     private String description;
     private UUID categoryId;
+    private UUID sportId;
     private String condition;
     private BigDecimal price;
     private String status;
-
 }
