@@ -14,3 +14,7 @@
 .primary-btn:hover {
   background-color: #1d4ed8; /* blue-700 */
 }
+
+a, button {
+  text-decoration: none;
+}

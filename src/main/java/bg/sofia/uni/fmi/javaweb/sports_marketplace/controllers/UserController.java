@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.controllers;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.LoginResponseDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.event.EventDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.user.UserLoginDto;
@@ -62,15 +63,36 @@ public class UserController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody UserLoginDto userLoginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserLoginDto userLoginDto){
         Authentication authentication=authManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDto.email(), userLoginDto.password()));
-        User user=userService.getUserByEmail(userLoginDto.email()).get();
-        return ResponseEntity.ok(Map.of("token", jwtUtil.generateToken(user)));
+        User user=userService.login(userLoginDto.email(), userLoginDto.password());
+        LoginResponseDto response = new LoginResponseDto(
+                jwtUtil.generateToken(user),
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getProfileImageUrl()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody UserRegistrationDto userRegDto){
-        User user=userService.register(userRegDto.firstName(), userRegDto.lastName() ,userRegDto.email(),userRegDto.password(), userRegDto.confirmPassword(), userRegDto.role()==null? Role.USER:userRegDto.role(), userRegDto.gender(), userRegDto.phoneNumber(), userRegDto.addressCreateDto(), userRegDto.birthdate());
+        User user=userService.register(
+                userRegDto.firstName(),
+                userRegDto.lastName(),
+                userRegDto.email(),
+                userRegDto.password(),
+                userRegDto.confirmPassword(),
+                userRegDto.role()==null? Role.USER:userRegDto.role(),
+                userRegDto.imageUrl(),
+                userRegDto.gender(),
+                userRegDto.phoneNumber(),
+                userRegDto.addressCreateDto(),
+                userRegDto.birthdate()
+        );
         return ResponseEntity.ok(Map.of("token", jwtUtil.generateToken(user)));
     }
 

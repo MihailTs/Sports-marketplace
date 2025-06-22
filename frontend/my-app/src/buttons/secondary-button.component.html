@@ -1,5 +1,13 @@
-<button [type]="type"
-        (click)="handleClick()"
-        class="secondary-btn">
+<a *ngIf="routerLink; else normalButton"
+   [routerLink]="routerLink"
+   class="secondary-btn">
   {{ text }}
-</button>
+</a>
+
+<ng-template #normalButton>
+  <button [type]="type"
+          (click)="handleClick()"
+          [ngClass]="['secondary-btn', class]">
+    {{ text }}
+  </button>
+</ng-template>

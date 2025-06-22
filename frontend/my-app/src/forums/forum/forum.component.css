@@ -1,0 +1,15 @@
+.forum-container {
+  cursor: pointer;
+  border: 2px solid #0275f9;
+  border-radius: 5px;
+  background-color: #fafafa;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.description, .sport, .timestamps {
+  margin: 0.3rem 0;
+  color: #555;
+}

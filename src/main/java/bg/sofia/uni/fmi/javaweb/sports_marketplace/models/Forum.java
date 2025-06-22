@@ -26,9 +26,6 @@ public class Forum {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name="updated_at")
-    private LocalDateTime updatedAt;
-
     @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ForumPost> forumPosts=new ArrayList<>();
 
@@ -37,6 +34,5 @@ public class Forum {
         this.description=description;
         this.sport=sport;
         this.createdAt=LocalDateTime.now();
-        this.updatedAt=LocalDateTime.now();
     }
 }

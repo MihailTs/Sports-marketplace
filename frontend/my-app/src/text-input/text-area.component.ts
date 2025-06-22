@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'text-area',
+  standalone: true,
   templateUrl: './text-area.component.html',
   styleUrls: ['./text-area.component.css']
 })

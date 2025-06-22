@@ -34,7 +34,7 @@ public class ForumController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedResponse<ForumDto>> getAllForums(@PageableDefault(size=10, sort="updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<PagedResponse<ForumDto>> getAllForums(@PageableDefault(size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.ok(PagedResponse.fromPage(forumService.getAllForums(pageable), ForumDto::fromEntity));
     }
 
@@ -51,7 +51,7 @@ public class ForumController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<PagedResponse<ForumPostDto>> getAllPostsFromForum(@PathVariable UUID id, @PageableDefault(size=10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.ok(PagedResponse.fromPage(forumPostService.getAllForumPosts(id, pageable), ForumPostDto::fromEntity));
     }
 
@@ -75,6 +75,7 @@ public class ForumController {
 
     @GetMapping("/{forumId}/posts/{postId}/comments")
     public ResponseEntity<List<ForumCommentDto>> getAllComments(@PathVariable UUID forumId, @PathVariable UUID postId){
+        System.out.println(forumCommentService.getAllForumComments(forumId, postId).stream().map(ForumCommentDto::fromEntity).toList());
         return ResponseEntity.ok(forumCommentService.getAllForumComments(forumId, postId).stream().map(ForumCommentDto::fromEntity).toList());
     }
 
