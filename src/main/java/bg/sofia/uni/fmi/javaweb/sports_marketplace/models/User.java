@@ -46,6 +46,7 @@ public class User {
     @OneToMany(mappedBy = "recepient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> receivedReviews;
 
+
     public User(String email, String firstName, String lastName, String password, Role role, String gender, String phone, Address address, LocalDate birthDate){
         this.email=email;
         this.firstName=firstName;

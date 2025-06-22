@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -20,6 +21,8 @@ public class EventParticipant {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
+
+    private LocalDateTime joinedAt;
 
     @ManyToOne
     @JoinColumn(name="user_id")

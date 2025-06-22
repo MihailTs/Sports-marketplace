@@ -8,8 +8,8 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
-public record EventDto(@NotBlank String title, String description, @NotBlank String location, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, Sport sport) {
+public record EventDto(@NotBlank String title, String description, @NotBlank String location, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, Sport sport, int capacity) {
     public static EventDto fromEntity(Event event){
-        return new EventDto(event.getTitle(), event.getDescription(), event.getLocation(), event.getStartTime(), event.getEndTime(), event.getSport());
+        return new EventDto(event.getTitle(), event.getDescription(), event.getLocation(), event.getStartTime(), event.getEndTime(), event.getSport(), event.getCapacity());
     }
 }

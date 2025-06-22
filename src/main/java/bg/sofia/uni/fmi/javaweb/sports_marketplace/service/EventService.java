@@ -50,7 +50,7 @@ public class EventService {
         if (eventDto.startTime().isAfter(eventDto.endTime())) {
             throw new TimeframeMismatchException();
         }
-        return eventRepository.save(new Event(eventDto.title(), eventDto.description(), eventDto.location(), eventDto.startTime(), eventDto.endTime(), user.get(), eventDto.sport()));
+        return eventRepository.save(new Event(eventDto.title(), eventDto.description(), eventDto.location(), eventDto.startTime(), eventDto.endTime(), user.get(), eventDto.sport(), eventDto.capacity()));
     }
 
     public void deleteEvent(UUID id) {

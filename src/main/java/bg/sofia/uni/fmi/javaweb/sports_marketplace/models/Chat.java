@@ -1,15 +1,13 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "chats")
@@ -19,8 +17,14 @@ import java.time.LocalDateTime;
 public class Chat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    List<Message> messages;
+
+
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.REMOVE)
+    List<ChatParticipant> participants;
 }
