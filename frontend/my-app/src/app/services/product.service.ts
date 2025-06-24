@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {AbstractControl, ValidationErrors} from '@angular/forms';
 
-class Product {
+export interface Product {
   sellerId : string;
   name : string;
   description : string;
-  categoryID : string;
-  sportID : string;
+  categoryId : string;
+  sportId : string;
   condition : string;
   price : number;
   status : string;
@@ -20,15 +21,50 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(
-      `/api/products/`
+      `$/api/products/`
     );
   }
 
-  createProduct(product : Product): Observable<Product> {
+
+
+  createProduct(product: Product): any {
     return this.http.post<Product>(
-      `/api/products`,
+      `/api/products/`,
       product
     );
   }
+
+  queryProducts(filters: {
+    minPrice?: number;
+    maxPrice?: number;
+    categoryId?: string;
+    sportId?: string;
+    condition?: string;
+    status?: string;
+  }): Observable<Product[]> {
+    let params = new HttpParams();
+
+    if (filters.minPrice !== undefined) {
+      params = params.set('minPrice', filters.minPrice);
+    }
+    if (filters.maxPrice !== undefined) {
+      params = params.set('maxPrice', filters.maxPrice);
+    }
+    if (filters.categoryId) {
+      params = params.set('categoryId', filters.categoryId);
+    }
+    if (filters.sportId) {
+      params = params.set('sportId', filters.sportId);
+    }
+    if (filters.condition) {
+      params = params.set('condition', filters.condition);
+    }
+    if (filters.status) {
+      params = params.set('status', filters.status);
+    }
+
+    return this.http.get<Product[]>(`/api/products/filter`, { params });
+  }
+
 
 }

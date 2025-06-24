@@ -6,9 +6,11 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductSummaryDto
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductUpdateDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Category;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Product;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Sport;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.CategoryRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.ProductRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.SportRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final SportRepository sportRepository;
 
     public ProductDto getProductById(UUID id) {
         Product product = productRepository.findById(id)
@@ -35,37 +38,43 @@ public class ProductService {
 
     public List<ProductSummaryDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(this::toSummaryDto)
+                .map(ProductSummaryDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     public List<ProductSummaryDto> getProductsByStatus(String status) {
         return productRepository.findByStatus(status).stream()
-                .map(this::toSummaryDto)
+                .map(ProductSummaryDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
+
+
     public UUID createProduct(ProductCreateDto dto) {
-        System.out.println("AUAUUAUAUAUUAUAUAUA  " + dto.getSellerId());
         User seller = userRepository.findById(dto.getSellerId())
                 .orElseThrow(() -> new EntityNotFoundException("Seller not found"));
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
+        Sport sport = sportRepository.findById(dto.getSportId())
+                .orElseThrow(() -> new EntityNotFoundException("Sport not found"));
+
         Product product = Product.builder()
-                .id(UUID.randomUUID())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .seller(seller)
                 .category(category)
                 .condition(dto.getCondition())
                 .price(dto.getPrice())
+                .sport(sport)
                 .status(dto.getStatus())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+
         productRepository.save(product);
+
         return product.getId();
     }
 
@@ -94,16 +103,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    private ProductSummaryDto toSummaryDto(Product product) {
-        ProductSummaryDto dto = new ProductSummaryDto();
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-        dto.setPrice(product.getPrice());
-        dto.setCondition(product.getCondition());
-        dto.setStatus(product.getStatus());
-        return dto;
-    }
-
     private ProductDto toFetchDto(Product product) {
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
@@ -117,5 +116,19 @@ public class ProductService {
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
         return dto;
+    }
+
+    public List<ProductSummaryDto> filterProducts(
+            Double minPrice,
+            Double maxPrice,
+            UUID categoryId,
+            UUID sportId,
+            String condition,
+            String status)
+    {
+        return productRepository.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status)
+                .stream()
+                .map(ProductSummaryDto::fromEntity)
+                .toList();
     }
 }

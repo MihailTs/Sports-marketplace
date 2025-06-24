@@ -18,6 +18,26 @@
         </div>
 
         <div class="input-group">
+          <label class="input-label" for="sportId">Sport</label>
+          <div class="scrollable-select-wrapper">
+            <select
+              id="sportId"
+              formControlName="sportId"
+              class="text-input"
+              [class.error]="getFieldError('sportId')">
+              <option value="" disabled selected>Select sport</option>
+              <option *ngFor="let sport of sports" [value]="sport.id">
+                {{ sport.name }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="getFieldError('sportId')" class="field-error">
+            {{ getFieldError('sportId') }}
+          </div>
+        </div>
+
+
+        <div class="input-group">
           <label class="input-label" for="categoryId">Category</label>
           <select
             id="categoryId"

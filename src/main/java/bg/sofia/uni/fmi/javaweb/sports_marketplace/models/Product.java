@@ -34,11 +34,15 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sport_id")
+    private Sport sport;
+
     @Column(length = 255)
     private String condition;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(precision = 2)
+    private double price;
 
     @Column(length = 255)
     private String status;

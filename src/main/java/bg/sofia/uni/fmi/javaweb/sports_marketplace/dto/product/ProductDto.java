@@ -13,7 +13,7 @@ public class ProductDto {
     private UUID sellerId;
     private UUID categoryId;
     private String condition;
-    private BigDecimal price;
+    private double price;
     private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

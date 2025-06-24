@@ -12,6 +12,6 @@ public class ProductCreateDto {
     private UUID categoryId;
     private UUID sportId;
     private String condition;
-    private BigDecimal price;
+    private double price;
     private String status;
 }

@@ -59,6 +59,19 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductSummaryDto>> filterProducts(
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) UUID categoryId,
+            @RequestParam(required = false) UUID sportId,
+            @RequestParam(required = false) String condition,
+            @RequestParam(required = false) String status
+    ) {
+        List<ProductSummaryDto> products = productService.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status);
+        return ResponseEntity.ok(products);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         try {

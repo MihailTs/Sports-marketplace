@@ -104,3 +104,9 @@ p {
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
+
+.scrollable-select-wrapper select {
+  max-height: 140px;
+  overflow-y: auto;
+  display: block;
+}
