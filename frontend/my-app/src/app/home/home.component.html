@@ -14,11 +14,20 @@
 
   <!-- Pagination controls -->
   <div class="pagination">
-    <button
-      *ngFor="let page of [].constructor(totalPages); let i = index"
-      (click)="goToPage(i + 1)"
-      [class.active]="currentPage === i + 1">
-      {{ i + 1 }}
-    </button>
+    <button (click)="prevPage()" [disabled]="currentPage === 1">‹ Prev</button>
+
+    <ng-container *ngFor="let page of paginationButtons">
+      <button
+        *ngIf="page !== '...'; else dots"
+        (click)="goToPage(Number(page))"
+        [class.active]="currentPage === page">
+        {{ page }}
+      </button>
+      <ng-template #dots>
+        <button class="dots" disabled>…</button>
+      </ng-template>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === 5">Next ›</button>
   </div>
 </section>
