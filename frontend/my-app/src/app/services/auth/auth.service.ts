@@ -6,16 +6,13 @@ import {AuthResponse} from './auth.response';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  //To be placed in an .env file in the future
-  apiUrl = 'http://localhost:8080'
-
   constructor(private http: HttpClient) {}
 
   login(credentials: { email: string; password: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/api/users/auth/login`, credentials);
+    return this.http.post<AuthResponse>(`/api/users/auth/login`, credentials);
   }
 
   register(userData: FormData): Observable<string> {
-    return this.http.post(`${this.apiUrl}/api/users/auth/register`, userData, { responseType: 'text' });
+    return this.http.post(`/api/users/auth/register`, userData, { responseType: 'text' });
   }
 }

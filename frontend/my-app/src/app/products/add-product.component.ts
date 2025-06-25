@@ -86,6 +86,9 @@ export class AddProductComponent {
 
     const product: Product = {
       sellerId: this.currentUserService.currentUser.id,
+      sellerName:
+        this.currentUserService.currentUser.firstName + " " +
+        this.currentUserService.currentUser.firstName,
       name: formData.name as string,
       description: formData.description as string,
       categoryId: formData.categoryId as string,

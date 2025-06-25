@@ -126,3 +126,22 @@ input:checked + .slider {
 input:checked + .slider::before {
   transform: translateX(22px);
 }
+
+.product-list {
+  margin-top: 40px;
+  padding: 0 16px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}

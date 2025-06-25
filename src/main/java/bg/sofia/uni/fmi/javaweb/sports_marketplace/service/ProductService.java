@@ -105,6 +105,9 @@ public class ProductService {
 
     private ProductDto toFetchDto(Product product) {
         ProductDto dto = new ProductDto();
+        dto.setSellerId(product.getSeller().getId());
+        dto.setSellerName(
+                product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
         dto.setId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());

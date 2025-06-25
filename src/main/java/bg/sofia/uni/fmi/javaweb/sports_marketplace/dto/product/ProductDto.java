@@ -8,9 +8,10 @@ import java.util.UUID;
 @Data
 public class ProductDto {
     private UUID id;
+    private String sellerName;
+    private UUID sellerId;
     private String name;
     private String description;
-    private UUID sellerId;
     private UUID categoryId;
     private String condition;
     private double price;

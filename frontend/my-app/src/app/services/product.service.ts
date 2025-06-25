@@ -3,12 +3,16 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AbstractControl, ValidationErrors} from '@angular/forms';
 
-export interface Product {
-  sellerId : string;
-  name : string;
-  description : string;
+export interface Product extends ProductSummary{
   categoryId : string;
   sportId : string;
+}
+
+export interface ProductSummary {
+  sellerId : string;
+  sellerName : string;
+  name : string;
+  description : string;
   condition : string;
   price : number;
   status : string;
@@ -19,17 +23,15 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(
-      `$/api/products/`
+  getProducts(): Observable<ProductSummary[]> {
+    return this.http.get<ProductSummary[]>(
+      `/api/products`
     );
   }
 
-
-
   createProduct(product: Product): any {
     return this.http.post<Product>(
-      `/api/products/`,
+      `/api/products`,
       product
     );
   }
@@ -41,7 +43,7 @@ export class ProductService {
     sportId?: string;
     condition?: string;
     status?: string;
-  }): Observable<Product[]> {
+  }): Observable<ProductSummary[]> {
     let params = new HttpParams();
 
     if (filters.minPrice !== undefined) {
@@ -63,7 +65,7 @@ export class ProductService {
       params = params.set('status', filters.status);
     }
 
-    return this.http.get<Product[]>(`/api/products/filter`, { params });
+    return this.http.get<ProductSummary[]>(`/api/products/filter`, { params });
   }
 
 
