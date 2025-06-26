@@ -1,50 +1,65 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {AbstractControl, ValidationErrors} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export interface Product extends ProductSummary{
-  categoryId : string;
-  sportId : string;
+export interface Product extends ProductSummary {
+  categoryId: string;
+  sportId: string;
 }
 
 export interface ProductSummary {
-  sellerId : string;
-  sellerName : string;
-  name : string;
-  description : string;
-  condition : string;
-  price : number;
-  status : string;
+  sellerId: string;
+  sellerName: string;
+  name: string;
+  description: string;
+  condition: string;
+  price: number;
+  status: string;
+}
+
+export interface PagedResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
+  apiUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<ProductSummary[]> {
     return this.http.get<ProductSummary[]>(
-      `/api/products`
+      `${this.apiUrl}/api/products`
     );
   }
 
   createProduct(product: Product): any {
     return this.http.post<Product>(
-      `/api/products`,
+      `${this.apiUrl}/api/products`,
       product
     );
   }
 
-  queryProducts(filters: {
-    minPrice?: number;
-    maxPrice?: number;
-    categoryId?: string;
-    sportId?: string;
-    condition?: string;
-    status?: string;
-  }): Observable<ProductSummary[]> {
-    let params = new HttpParams();
+  queryProducts(
+    filters: {
+      minPrice?: number;
+      maxPrice?: number;
+      categoryId?: string;
+      sportId?: string;
+      condition?: string;
+      status?: string;
+    },
+    page: number = 0,
+    size: number = 10
+  ): Observable<ProductSummary[]> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
 
     if (filters.minPrice !== undefined) {
       params = params.set('minPrice', filters.minPrice);
@@ -65,8 +80,9 @@ export class ProductService {
       params = params.set('status', filters.status);
     }
 
-    return this.http.get<ProductSummary[]>(`/api/products/filter`, { params });
+    return this.http.get<ProductSummary[]>(
+      `${this.apiUrl}/api/products/filter`,
+      { params }
+    );
   }
-
-
 }

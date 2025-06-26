@@ -1,33 +1,9 @@
-<!-- Previous sections remain the same -->
 <section class="form-section">
-  <div class="btn-group">
-    <primary-button text="Add a product" routerLink="/add-product"></primary-button>
-    <primary-button text="Visit a forum" routerLink="/forums"></primary-button>
-  </div>
-</section>
-
-<!-- NEW PRODUCT LIST SECTION -->
-<section class="product-list">
-  <div class="product-grid">
-    <product-card *ngFor="let p of paginatedProducts" [product]="p"></product-card>
-  </div>
-
-  <!-- Pagination controls -->
-  <div class="pagination">
-    <button (click)="prevPage()" [disabled]="currentPage === 1">‹ Prev</button>
-
-    <ng-container *ngFor="let page of paginationButtons">
-      <button
-        *ngIf="page !== '...'; else dots"
-        (click)="goToPage(Number(page))"
-        [class.active]="currentPage === page">
-        {{ page }}
-      </button>
-      <ng-template #dots>
-        <button class="dots" disabled>…</button>
-      </ng-template>
-    </ng-container>
-
-    <button (click)="nextPage()" [disabled]="currentPage === 5">Next ›</button>
+  <div class="center-container">
+    <div class="btn-group">
+      <primary-button text="Add a product" routerLink="/add-product"></primary-button>
+      <primary-button text="Visit a forum" routerLink="/forums"></primary-button>
+      <primary-button text="See products" routerLink="/see-products"></primary-button>
+    </div>
   </div>
 </section>

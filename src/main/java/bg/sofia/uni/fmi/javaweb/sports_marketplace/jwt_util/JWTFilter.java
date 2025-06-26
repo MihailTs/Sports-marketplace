@@ -60,7 +60,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userService.loadUserByUsername(email);
 
                 if (jwtUtil.isTokenValid(token, userDetails)) {
-                    String role = jwtUtil.extractRole(token); // NEW: extract role from token
+                    String role = jwtUtil.extractRole(token);
                     List<SimpleGrantedAuthority> authorities = List.of(
                             new SimpleGrantedAuthority("ROLE_" + role)
                     );

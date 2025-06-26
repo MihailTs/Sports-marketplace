@@ -1,6 +1,8 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.repository;
 
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,21 +25,23 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findRecentActiveProducts();
 
     @Query("""
-        SELECT p FROM Product p
-        WHERE (:minPrice IS NULL OR p.price >= :minPrice)
-        AND (:maxPrice IS NULL OR p.price <= :maxPrice)
-        AND (:categoryId IS NULL OR p.category.id = :categoryId)
-        AND (:sportId IS NULL OR p.sport.id = :sportId)
-        AND (:condition IS NULL OR p.condition = :condition)
-        AND (:status IS NULL OR p.status = :status)
-    """)
-    List<Product> filterProducts(
+    SELECT p FROM Product p
+    WHERE (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:categoryId IS NULL OR p.category.id = :categoryId)
+      AND (:sportId IS NULL OR p.sport.id = :sportId)
+      AND (:condition IS NULL OR p.condition = :condition)
+      AND (:status IS NULL OR p.status = :status)
+""")
+    Page<Product> filterProducts(
             @Param("minPrice") Double minPrice,
             @Param("maxPrice") Double maxPrice,
             @Param("categoryId") UUID categoryId,
             @Param("sportId") UUID sportId,
             @Param("condition") String condition,
-            @Param("status") String status
+            @Param("status") String status,
+            Pageable pageable
     );
+
 
 }

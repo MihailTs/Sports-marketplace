@@ -14,6 +14,9 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.SportRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,8 +50,6 @@ public class ProductService {
                 .map(ProductSummaryDto::fromEntity)
                 .collect(Collectors.toList());
     }
-
-
 
     public UUID createProduct(ProductCreateDto dto) {
         User seller = userRepository.findById(dto.getSellerId())
@@ -121,17 +122,19 @@ public class ProductService {
         return dto;
     }
 
-    public List<ProductSummaryDto> filterProducts(
+    public Page<ProductSummaryDto> filterProducts(
             Double minPrice,
             Double maxPrice,
             UUID categoryId,
             UUID sportId,
             String condition,
-            String status)
-    {
-        return productRepository.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status)
-                .stream()
-                .map(ProductSummaryDto::fromEntity)
-                .toList();
+            String status,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status, pageable)
+                .map(ProductSummaryDto::fromEntity);
     }
+
 }

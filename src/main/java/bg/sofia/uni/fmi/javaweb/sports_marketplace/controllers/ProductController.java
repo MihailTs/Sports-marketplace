@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.controllers;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.PagedResponse;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductCreateDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductSummaryDto;
@@ -7,6 +8,7 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductUpdateDto;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,17 +62,21 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ProductSummaryDto>> filterProducts(
+    public ResponseEntity<PagedResponse<ProductSummaryDto>> filterProducts(
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) UUID sportId,
             @RequestParam(required = false) String condition,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        List<ProductSummaryDto> products = productService.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status);
-        return ResponseEntity.ok(products);
+        Page<ProductSummaryDto> productPage = productService.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status, page, size);
+        PagedResponse<ProductSummaryDto> response = PagedResponse.fromPage(productPage, dto -> dto);
+        return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
