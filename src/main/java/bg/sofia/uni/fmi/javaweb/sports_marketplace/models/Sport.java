@@ -16,7 +16,4 @@ public class Sport {
     private UUID id;
     private String name;
 
-    public Sport(String name){
-        this.name=name;
-    }
 }

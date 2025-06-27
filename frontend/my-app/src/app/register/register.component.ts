@@ -62,7 +62,7 @@ export class RegisterComponent {
     this.pictureUrlValue = '';
   }
 
-    getFieldError(fieldName: string): string {
+  getFieldError(fieldName: string): string {
     const field = this.registerForm.get(fieldName);
     if (field?.touched && field?.errors) {
       if (field.errors['required']) return `${fieldName} is required`;
