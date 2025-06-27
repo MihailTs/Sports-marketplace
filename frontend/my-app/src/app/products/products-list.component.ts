@@ -77,11 +77,11 @@ export class ProductsListComponent {
     };
 
     this.productService.queryProducts(filters, page, this.itemsPerPage).subscribe({
-      next: (response: ProductSummary[]) => {
-        this.products = response;
-        this.totalProducts = response.length;
-        this.totalPages = Math.ceil(this.totalProducts / this.itemsPerPage);
-        this.currentPage = page;
+      next: (response) => {
+        this.products = response.content;
+        this.totalProducts = response.totalElements;
+        this.totalPages = response.totalPages;
+        this.currentPage = response.page;
         this.loading = false;
       },
       error: (err) => {

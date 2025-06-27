@@ -32,8 +32,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<ProductSummary[]> {
-    return this.http.get<ProductSummary[]>(
+  getProducts(): Observable<PagedResponse<ProductSummary>> {
+    return this.http.get<PagedResponse<ProductSummary>>(
       `${this.apiUrl}/api/products`
     );
   }
@@ -56,7 +56,7 @@ export class ProductService {
     },
     page: number = 0,
     size: number = 10
-  ): Observable<ProductSummary[]> {
+  ): Observable<PagedResponse<ProductSummary>> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size);
@@ -80,7 +80,7 @@ export class ProductService {
       params = params.set('status', filters.status);
     }
 
-    return this.http.get<ProductSummary[]>(
+    return this.http.get<PagedResponse<ProductSummary>>(
       `${this.apiUrl}/api/products/filter`,
       { params }
     );
