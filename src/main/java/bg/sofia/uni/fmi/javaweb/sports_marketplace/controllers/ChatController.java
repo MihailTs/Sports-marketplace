@@ -17,6 +17,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -51,4 +52,9 @@ public class ChatController {
         return ResponseEntity.ok(chatService.createChat(chatDto.users(), authentication.getName()));
     }
 
+    @GetMapping("/with-user/{userId}")
+    public ResponseEntity<Chat> getChatWithUser(@PathVariable UUID userId, Authentication authentication) {
+        System.out.println(chatService.findChatBetweenUsers(authentication.getName(), userId));
+        return ResponseEntity.ok(chatService.findChatBetweenUsers(authentication.getName(), userId));
+    }
 }

@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,16 +54,23 @@ public class ChatService {
     }
 
     public Chat createChat(List<UUID> usersId, String initializerEmail){
+
+        System.out.println("email:"+initializerEmail);
         Chat chat=new Chat();
         chat.setCreatedAt(LocalDateTime.now());
+        chatRepository.save(chat);
 
         User initializer=userRepository.findByEmail(initializerEmail).orElseThrow(UserDoesntExistException::new);
         chatParticipantRepository.save(new ChatParticipant(null, chat, initializer));
 
+        System.out.println("initializer:"+initializer.getFirstName());
+
         for(UUID userId: usersId){
             User user=userRepository.findById(userId).orElseThrow(UserDoesntExistException::new);
             chatParticipantRepository.save(new ChatParticipant(null, chat, user));
+            System.out.println("firstname"+user.getFirstName());
         }
+
 
         return chat;
     }
@@ -85,9 +94,16 @@ public class ChatService {
 
         MessageResponseDto response=MessageResponseDto.fromEntity(message);
 
+        System.out.println(messageDto);
+
         messagingTemplate.convertAndSend("/topic/chat." + messageDto.chatId(), response);
 
+    }
 
+    @Transactional
+    public Chat findChatBetweenUsers(String initializerEmail, UUID userId2) {
+        User user=userRepository.findByEmail(initializerEmail).orElseThrow(UserDoesntExistException::new);
+        return chatRepository.findOneOnOneChat(user.getId(), userId2).orElseThrow(ChatNotFoundException::new);
 
     }
 

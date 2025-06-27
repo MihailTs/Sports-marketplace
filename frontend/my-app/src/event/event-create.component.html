@@ -1,0 +1,49 @@
+<app-form [formGroup]="eventForm" (onSubmit)="onSubmit()" title="Create New Event">
+    <div>
+      <label for="title">Title *</label>
+      <input id="title" formControlName="title" />
+      <div *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" class="error">
+        Title is required.
+      </div>
+    </div>
+  
+    <div>
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
+  
+    <div>
+      <label for="location">Location *</label>
+      <input id="location" formControlName="location" />
+      <div *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched" class="error">
+        Location is required.
+      </div>
+    </div>
+  
+    <div>
+      <label for="startTime">Start Time *</label>
+      <input id="startTime" type="datetime-local" formControlName="startTime" />
+      <div *ngIf="eventForm.get('startTime')?.invalid && eventForm.get('startTime')?.touched" class="error">
+        Start Time is required.
+      </div>
+    </div>
+  
+    <div>
+      <label for="endTime">End Time *</label>
+      <input id="endTime" type="datetime-local" formControlName="endTime" />
+      <div *ngIf="eventForm.get('endTime')?.invalid && eventForm.get('endTime')?.touched" class="error">
+        End Time is required.
+      </div>
+    </div>
+  
+    <div>
+      <label for="capacity">Capacity *</label>
+      <input id="capacity" type="number" formControlName="capacity" min="1" />
+      <div *ngIf="eventForm.get('capacity')?.invalid && eventForm.get('capacity')?.touched" class="error">
+        Capacity must be at least 1.
+      </div>
+    </div>
+  
+    <button type="submit">Create Event</button>
+  </app-form>
+  

@@ -7,5 +7,5 @@ export interface MessageResponseDto {
   chatId: string;
   senderName: string;
   content: string;
-  sentAt: string; // ISO string
+  sentAt: string;
 }

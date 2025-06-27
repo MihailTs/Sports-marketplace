@@ -11,18 +11,22 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 
+
+@Controller
 public class ChatWebSocketController {
     private ChatService chatService;
     public ChatWebSocketController(ChatService chatService){
         this.chatService=chatService;
     }
-    @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload MessageDto message, @AuthenticationPrincipal User principal) {
-        String senderEmail=principal.getUsername();
+    @MessageMapping("chat.sendMessage")
+    public void sendMessage(@Payload MessageDto message, Principal principal) {
+        String senderEmail=principal.getName();
+        System.out.println("Received message: " + message.content());
         chatService.sendMessage(message, senderEmail);
     }
 }

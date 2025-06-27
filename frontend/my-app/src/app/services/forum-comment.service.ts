@@ -5,8 +5,9 @@ import { Observable } from 'rxjs';
 export interface ForumComment {
   id: string;
   content: string;
-  userName: string;
+  name: string;
   createdAt: Date;
+  userId:string;
 }
 
 @Injectable({ providedIn: 'root' })

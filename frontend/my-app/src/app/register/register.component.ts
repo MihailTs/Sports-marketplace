@@ -41,7 +41,11 @@ export class RegisterComponent {
       birthdate: ['', Validators.required],
       phone: ['', Validators.pattern(/^\+?[\d\s\-\(\)]+$/)],
       gender: ['', Validators.required],
-      address: ['', Validators.required],
+      state: [''],
+      city: [''],
+      zipCode: [''],
+      country: [''],
+      street: [''],
       pictureUrl: [''],
       role: ['user']
     }, { validators: this.passwordsMatchValidator });

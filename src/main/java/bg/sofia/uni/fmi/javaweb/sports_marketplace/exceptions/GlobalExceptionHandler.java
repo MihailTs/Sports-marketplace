@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions;
 
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Chat;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.ElementCollection;
@@ -117,6 +118,14 @@ public class GlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ChatNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleChatNotFound(ChatNotFoundException ex){
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
 }

@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Message {
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="chat_id")
+    @JsonBackReference
     private Chat chat;
 
     @ManyToOne(fetch = FetchType.LAZY)

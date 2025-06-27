@@ -1,9 +1,8 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.config;
 
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.JwtHandshakeInterceptor;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JwtHandshakeInterceptor;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JwtPrincipalHandshakeHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -30,7 +29,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-chat")
                 .setHandshakeHandler(jwtPrincipalHandshakeHandler)
                 .addInterceptors(jwtHandshakeInterceptor)
-                .setAllowedOrigins("*").withSockJS();
+                .setAllowedOrigins("http://localhost:4200").withSockJS();
+
+        registry.addEndpoint("/ws-notifications")
+                .setHandshakeHandler(jwtPrincipalHandshakeHandler)
+                .addInterceptors(jwtHandshakeInterceptor)
+                .setAllowedOrigins("http://localhost:4200")
+                .withSockJS();
     }
+
+
 
 }

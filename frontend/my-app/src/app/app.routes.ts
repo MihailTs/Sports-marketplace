@@ -4,6 +4,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {ForumsPageComponent} from './forums/forums-page.component';
 import {SingleForumComponent} from './forums/single-forum.component';
+import { ChatComponent } from '../chat/chat.component';
+import { UserProfileComponent } from '../user/user.profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,4 +18,8 @@ export const routes: Routes = [
       { path: ':id', component: SingleForumComponent }
     ]
   }
+  ,
+  { path: 'chat/:id', component: ChatComponent }
+  ,
+  { path: 'users/:id', component: UserProfileComponent }
 ];

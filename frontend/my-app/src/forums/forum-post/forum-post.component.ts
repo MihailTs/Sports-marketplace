@@ -7,7 +7,7 @@ import {ForumPost} from '../../app/services/forum-posts.service';
   selector: 'forum-post',
   standalone: true,
   templateUrl: './forum-post.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   styleUrls: ['./forum-post.component.css']
 })
 export class ForumPostComponent {

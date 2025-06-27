@@ -18,7 +18,8 @@ public record UserDto(
         String phoneNumber,
         AddressDto address,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String profileImageURL
 ) {
     public static UserDto fromEntity(User user) {
         return new UserDto(
@@ -31,7 +32,8 @@ public record UserDto(
                 user.getPhone(),
                 user.getAddress()==null?null:AddressDto.fromEntity(user.getAddress()),
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                user.getProfileImageUrl()
         );
     }
 }

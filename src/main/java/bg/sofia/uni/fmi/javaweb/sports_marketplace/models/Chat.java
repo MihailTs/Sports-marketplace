@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,10 +22,16 @@ public class Chat {
     private UUID id;
     private LocalDateTime createdAt;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     List<Message> messages;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "chat", cascade = CascadeType.REMOVE)
     List<ChatParticipant> participants;
+
+    @Override
+    public String toString() {
+        return "Chat{id=" + id + ", participantCount=" + (participants != null ? participants.size() : 0) + "}";
+    }
 }

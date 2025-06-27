@@ -106,9 +106,78 @@
           formControlName="address"
           type="text"
           class="text-input"
-          [class.error]="getFieldError('phone')" />
+          [class.error]="getFieldError('address')" />
         <div *ngIf="getFieldError('address')" class="field-error">
           {{ getFieldError('address') }}
+        </div>
+      </div>
+
+      
+      <div class="input-group">
+        <text-box
+          label="Country"
+          id="country"
+          formControlName="country"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('country')" />
+        <div *ngIf="getFieldError('country')" class="field-error">
+          {{ getFieldError('country') }}
+        </div>
+      </div>
+
+      
+      <div class="input-group">
+        <text-box
+          label="City"
+          id="city"
+          formControlName="city"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('city')" />
+        <div *ngIf="getFieldError('city')" class="field-error">
+          {{ getFieldError('city') }}
+        </div>
+      </div>
+
+      
+      <div class="input-group">
+        <text-box
+          label="Zip Code"
+          id="zipCode"
+          formControlName="zipCode"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('zipCode')" />
+        <div *ngIf="getFieldError('zipCode')" class="field-error">
+          {{ getFieldError('zipCode') }}
+        </div>
+      </div>
+
+      <div class="input-group">
+        <text-box
+          label="State"
+          id="state"
+          formControlName="state"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('state')" />
+        <div *ngIf="getFieldError('state')" class="field-error">
+          {{ getFieldError('state') }}
+        </div>
+      </div>
+
+      
+      <div class="input-group">
+        <text-box
+          label="Street"
+          id="street"
+          formControlName="street"
+          type="text"
+          class="text-input"
+          [class.error]="getFieldError('street')" />
+        <div *ngIf="getFieldError('street')" class="field-error">
+          {{ getFieldError('street') }}
         </div>
       </div>
 

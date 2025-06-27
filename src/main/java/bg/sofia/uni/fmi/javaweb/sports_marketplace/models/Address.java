@@ -28,10 +28,6 @@ public class Address {
 
     private String country;
 
-    //@Column(name = "user_id")
-    //@OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<User> user;
-
     @Override
     public boolean equals(Object o){
         if(this==o) return true;

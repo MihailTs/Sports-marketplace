@@ -1,0 +1,11 @@
+<div *ngIf="loading">Loading event details...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="event">
+  <h2>{{ event.title }}</h2>
+  <p><strong>Description:</strong> {{ event.description }}</p>
+  <p><strong>Location:</strong> {{ event.location }}</p>
+  <p><strong>Start:</strong> {{ event.startTime | date:'short' }}</p>
+  <p><strong>End:</strong> {{ event.endTime | date:'short' }}</p>
+  <p><strong>Capacity:</strong> {{ event.capacity }}</p>
+</div>

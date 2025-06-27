@@ -1,6 +1,8 @@
 <div class="comment-card">
   <div class="comment-header">
-    <strong>{{ comment.userName }}</strong>
+    <p><a [routerLink]="['/users', comment.userId]">
+      {{ comment.name }}
+    </a></p>
     <span class="date">{{ comment.createdAt | date:'short' }}</span>
   </div>
   <div class="comment-content">

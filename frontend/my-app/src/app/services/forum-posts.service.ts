@@ -9,6 +9,7 @@ export interface ForumPost {
   title: string;
   content: string;
   userName: string;
+  userId: string;
 }
 
 @Injectable({ providedIn: 'root' })

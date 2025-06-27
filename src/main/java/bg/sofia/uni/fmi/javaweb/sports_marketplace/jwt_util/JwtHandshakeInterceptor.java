@@ -1,4 +1,4 @@
-package bg.sofia.uni.fmi.javaweb.sports_marketplace;
+package bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util;
 
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,22 +29,31 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
 
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
+
+            // 1. Try Authorization header first
             String authHeader = httpRequest.getHeader("Authorization");
 
+            // 2. If no Authorization header, try query parameter "token"
+            String token = null;
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String token = authHeader.substring(7);
-                String email = jwtUtil.extractEmail(token); // You must implement this
+                token = authHeader.substring(7);
+            } else {
+                token = httpRequest.getParameter("token");
+            }
+
+            if (token != null) {
+                String email = jwtUtil.extractEmail(token);
                 if (email != null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                     if (jwtUtil.isTokenValid(token, userDetails)) {
-                        // ✅ Store the user in the attributes for later use
                         attributes.put("user", userDetails);
+                        return true;
                     }
                 }
             }
         }
 
-        return true;
+        return false; // reject handshake if token invalid or missing
     }
 
     @Override

@@ -9,9 +9,12 @@ import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UnAuthorizedAccess
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.exceptions.UserDoesntExistException;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.jwt_util.JWTUtil;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Event;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Notification;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Role;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.NotificationRepository;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.EventService;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.NotificationService;
 import bg.sofia.uni.fmi.javaweb.sports_marketplace.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -40,18 +43,20 @@ public class UserController {
     private EventService eventService;
     private JWTUtil jwtUtil;
     private AuthenticationManager authManager;
+    private NotificationService notificationService;
 
     @Autowired
-    public UserController(UserService userService, JWTUtil jwtUtil, AuthenticationManager authManager, EventService eventService){
+    public UserController(UserService userService, JWTUtil jwtUtil, AuthenticationManager authManager, EventService eventService, NotificationService notificationService){
         this.userService=userService;
         this.jwtUtil=jwtUtil;
         this.authManager=authManager;
         this.eventService=eventService;
+        this.notificationService=notificationService;
     }
 
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable UUID id){
-        return userService.getUserById(id).map(UserDto::fromEntity).orElseThrow();
+        return userService.getUserById(id).map(UserDto::fromEntity).orElseThrow(()->new UserDoesntExistException("user with id:"+id +" doesn't exist"));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -155,5 +160,10 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDto> getSelf(Authentication authentication){
         return ResponseEntity.ok(UserDto.fromEntity(userService.getUserByEmail(authentication.getName()).get()));
+    }
+
+    @GetMapping("/{userId}/notifications")
+    public ResponseEntity<List<Notification>> getNotifications(@PathVariable UUID userId){
+        return ResponseEntity.ok(notificationService.getAllNotifications(userId));
     }
 }

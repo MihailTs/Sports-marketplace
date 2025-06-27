@@ -1,0 +1,9 @@
+<div class="user-profile" *ngIf="user">
+    <img *ngIf="user.profileImageUrl" [src]="user.profileImageUrl" alt="User photo" />
+    <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+    <p><span class="label">Email:</span> {{ user.email }}</p>
+    <p><span class="label">Gender:</span> {{ user.gender }}</p>
+    <p><span class="label">Phone:</span> {{ user.phoneNumber }}</p>
+    <p><span class="label">Joined:</span> {{ user.createdAt | date: 'mediumDate' }}</p>
+    <button (click)="startChat()">Start Chat</button>
+  </div>

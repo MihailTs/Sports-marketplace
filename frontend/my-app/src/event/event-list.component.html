@@ -1,0 +1,11 @@
+<h2>Events</h2>
+
+<div *ngIf="loading">Loading events...</div>
+
+<ul>
+  <li *ngFor="let event of events" (click)="openEvent(event)" style="cursor:pointer;">
+    <strong>{{ event.title }}</strong><br />
+    <small>{{ event.startTime | date:'short' }} - {{ event.endTime | date:'short' }}</small><br />
+    <span>{{ event.location }}</span>
+  </li>
+</ul>
