@@ -1,39 +1,91 @@
 body {
-  margin: 0;
-  padding: 0;
-  background-color: #282851;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
-  height: 100vh;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.form-section {
+  position: relative;
+  min-height: 100vh;
+  background:
+    url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  width: 100%;
+  padding: 2rem;
 }
 
 .btn-group {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 250px;
+  gap: 2rem;
+  width: 400px;
+  max-width: 450px;
   text-align: center;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-primary-button {
-  display: block;
+
+.primary-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
-  padding: 1rem 2rem;
-  font-size: 1.25rem;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
 .footer {
   position: fixed;
-  bottom: 1rem;
-  width: 100%;
-  text-align: center;
-  color: #9ca3af;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
+  font-weight: 300;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .center-container {
+    padding: 1rem;
+  }
+
+  .btn-group {
+    max-width: 400px;
+  }
+
+  .primary-button {
+    width: 10rem;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
 }
