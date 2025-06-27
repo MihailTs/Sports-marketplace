@@ -5,6 +5,7 @@
   background: #f5f7fa;
   min-height: 100vh;
   padding: 2rem;
+  overflow-x: hidden;
 }
 
 .form-section {
@@ -13,7 +14,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
 }
 
 .form-section h1 {
@@ -22,10 +23,6 @@
   margin-bottom: 1.5rem;
   color: #1a1a1a;
   font-weight: 600;
-}
-
-.input-group {
-  margin-bottom: 1.25rem;
 }
 
 .input-label {
@@ -38,9 +35,9 @@
 .text-input,
 select {
   width: 100%;
+  padding: 0.75rem;
   font-size: 1rem;
   border-radius: 8px;
-  background-color: #fafafa;
   color: #333;
   transition: border-color 0.2s;
 }
@@ -94,4 +91,16 @@ p {
   border-radius: 8px;
   margin-top: 0.5rem;
   border: 1px solid #ddd;
+}
+
+.field-error {
+  color: #e53935;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.scrollable-select-wrapper select {
+  max-height: 140px;
+  overflow-y: auto;
+  display: block;
 }

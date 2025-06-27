@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export interface ForumComment {
   id: string;
   content: string;
+  userId: string;
   name: string;
   createdAt: Date;
   userId:string;

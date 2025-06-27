@@ -1,13 +1,17 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product;
 
+import lombok.Data;
 import java.math.BigDecimal;
+import java.util.UUID;
 
-public record ProductCreateDto(
-        String name,
-        String description,
-        BigDecimal price,
-        Integer stockQuantity,
-        String imageUrl,
-        Long categoryId
-) {}
-
+@Data
+public class ProductCreateDto {
+    private UUID sellerId;
+    private String name;
+    private String description;
+    private UUID categoryId;
+    private UUID sportId;
+    private String condition;
+    private double price;
+    private String status;
+}

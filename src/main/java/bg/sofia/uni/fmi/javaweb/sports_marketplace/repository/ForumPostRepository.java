@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-public interface ForumPostRepository extends JpaRepository<ForumPost, UUID> {
+public interface
+ForumPostRepository extends JpaRepository<ForumPost, UUID> {
     Page<ForumPost> findAllByForumId(UUID forumId, Pageable pageable);
     @Modifying
     @Transactional

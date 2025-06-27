@@ -1,7 +1,5 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.category;
 
-import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Category;
-
 public record CategoryDto(
         Long id,
         String name,

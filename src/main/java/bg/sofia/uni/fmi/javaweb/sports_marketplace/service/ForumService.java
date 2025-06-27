@@ -33,10 +33,7 @@ public class ForumService {
     }
 
     public Forum createForum(ForumCreationDto forumDto){
-        Optional<Sport> sport=sportRepository.findByName(forumDto.sport());
-        if(sport.isEmpty()){
-            sport=Optional.of(new Sport(forumDto.sport()));
-        }
+        Optional<Sport> sport = sportRepository.findById(forumDto.sportId());
         return forumRepository.save(new Forum(forumDto.title(), forumDto.description(), sport.get()));
     }
 

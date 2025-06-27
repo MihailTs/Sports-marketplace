@@ -1,11 +1,14 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import {PrimaryButtonComponent} from '../../buttons/primary-button.component';
-import {SecondaryButtonComponent} from '../../buttons/secondary-button.component';
-import {TextBoxComponent} from '../../text-input/text-box.component';
-import {FooterComponent} from '../../footer/footer.component';
-import {ForumComponent} from '../../forums/forum/forum.component';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PrimaryButtonComponent } from '../../buttons/primary-button.component';
+import { SecondaryButtonComponent } from '../../buttons/secondary-button.component';
+import { TextBoxComponent } from '../../text-input/text-box.component';
+import { FooterComponent } from '../../footer/footer.component';
+import { ForumComponent } from '../../forums/forum/forum.component';
+import {ProductService, ProductSummary} from '../services/product.service';
+import {ProductCardComponent} from '../../product-card/product-card.component';
+import {ForumService} from '../services/forum.service';
 
 @Component({
   selector: 'home',
@@ -22,5 +25,4 @@ import {ForumComponent} from '../../forums/forum/forum.component';
     ForumComponent
   ]
 })
-export class HomeComponent {
-}
+export class HomeComponent {}

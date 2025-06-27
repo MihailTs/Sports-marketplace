@@ -1,0 +1,126 @@
+<div class="container">
+  <section class="form-section">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <h1>Add Product</h1>
+
+      <div class="form-grid">
+        <div class="input-group">
+          <text-box
+            label="Product Name"
+            id="name"
+            formControlName="name"
+            type="text"
+            class="text-input"
+            [class.error]="getFieldError('name')" />
+          <div *ngIf="getFieldError('name')" class="field-error">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="sportId">Sport</label>
+          <div class="scrollable-select-wrapper">
+            <select
+              id="sportId"
+              formControlName="sportId"
+              class="text-input"
+              [class.error]="getFieldError('sportId')">
+              <option value="" disabled selected>Select sport</option>
+              <option *ngFor="let sport of sports" [value]="sport.id">
+                {{ sport.name }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="getFieldError('sportId')" class="field-error">
+            {{ getFieldError('sportId') }}
+          </div>
+        </div>
+
+
+        <div class="input-group">
+          <label class="input-label" for="categoryId">Category</label>
+          <select
+            id="categoryId"
+            formControlName="categoryId"
+            class="text-input"
+            [class.error]="getFieldError('categoryId')">
+            <option value="" disabled selected>Select category</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+          <div *ngIf="getFieldError('categoryId')" class="field-error">
+            {{ getFieldError('categoryId') }}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="condition">Condition</label>
+          <select
+            id="condition"
+            formControlName="condition"
+            class="text-input"
+            [class.error]="getFieldError('condition')">
+            <option value="" disabled selected>Select condition</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+          </select>
+          <div *ngIf="getFieldError('condition')" class="field-error">
+            {{ getFieldError('condition') }}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <text-box
+            label="Price in euro"
+            id="price"
+            formControlName="price"
+            type="text"
+            class="text-input"
+            [class.error]="getFieldError('price')" />
+          <div *ngIf="getFieldError('price')" class="field-error">
+            {{ getFieldError('price') }}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="status">Status</label>
+          <select
+            id="status"
+            formControlName="status"
+            class="text-input"
+            [class.error]="getFieldError('status')">
+            <option value="" disabled selected>Select status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <div *ngIf="getFieldError('status')" class="field-error">
+            {{ getFieldError('status') }}
+          </div>
+        </div>
+
+        <div class="input-group full-width">
+          <text-box
+            label="Description"
+            id="description"
+            formControlName="description"
+            type="text"
+            class="text-input"
+            [class.error]="getFieldError('description')" />
+          <div *ngIf="getFieldError('description')" class="field-error">
+            {{ getFieldError('description') }}
+          </div>
+        </div>
+
+        <div class="input-group full-width">
+          <primary-button
+            text="Create Product"
+            type="submit"
+            class="primary-btn">
+            {{ isSubmitting ? 'Submitting...' : 'Create Product' }}
+          </primary-button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

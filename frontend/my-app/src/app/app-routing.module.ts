@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', component: AppComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: '' } // wildcard fallback
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

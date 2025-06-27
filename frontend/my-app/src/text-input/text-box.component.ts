@@ -25,7 +25,6 @@ export class TextBoxComponent implements ControlValueAccessor {
 
   @Output() valueChange = new EventEmitter<string>();
 
-  // ControlValueAccessor methods
   private onChange = (value: string) => {};
   private onTouched = () => {};
 
@@ -33,14 +32,13 @@ export class TextBoxComponent implements ControlValueAccessor {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
     this.valueChange.emit(target.value);
-    this.onChange(target.value); // Added for reactive forms
+    this.onChange(target.value);
   }
 
   onBlur(): void {
-    this.onTouched(); // Added for reactive forms
+    this.onTouched();
   }
 
-  // ControlValueAccessor implementation
   writeValue(value: string): void {
     this.value = value || '';
   }
@@ -51,9 +49,5 @@ export class TextBoxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    // Optional: handle disabled state if needed
   }
 }

@@ -1,12 +1,14 @@
 package bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product;
 
-import java.math.BigDecimal;
+import lombok.Data;
+import java.util.UUID;
 
-public record ProductUpdateDto(
-        String name,
-        String description,
-        BigDecimal price,
-        Integer stockQuantity,
-        String imageUrl,
-        Long categoryId
-) {}
+@Data
+public class ProductUpdateDto {
+    private String name;
+    private String description;
+    private UUID categoryId;
+    private String condition;
+    private double price;
+    private String status;
+}

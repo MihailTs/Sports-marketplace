@@ -14,7 +14,6 @@ export interface ForumPost {
 
 @Injectable({ providedIn: 'root' })
 export class ForumPostsService {
-  apiUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +22,7 @@ export class ForumPostsService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<PagedResponse<ForumPost>>(`${this.apiUrl}/api/forums/${forumId}/posts`, { params });
+    return this.http.get<PagedResponse<ForumPost>>(`/api/forums/${forumId}/posts`, { params });
   }
 
   createPost(forumId: string, post: {
@@ -31,7 +30,7 @@ export class ForumPostsService {
     userId: string | undefined;
     content: string
   }): Observable<ForumPost> {
-    return this.http.post<ForumPost>(`${this.apiUrl}/api/forums/${forumId}/posts`, post);
+    return this.http.post<ForumPost>(`/api/forums/${forumId}/posts`, post);
   }
 
 }

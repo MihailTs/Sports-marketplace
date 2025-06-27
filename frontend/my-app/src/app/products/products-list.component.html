@@ -1,0 +1,80 @@
+<section class="product-list">
+  <div *ngIf="loading" class="loading-indicator">Loading products...</div>
+
+  <section class="filters">
+    <h3>Filter Products</h3>
+    <form (ngSubmit)="applyFilters()" #filterForm="ngForm">
+      <label>
+        Min Price:
+        <input type="number" [(ngModel)]="minPrice" name="minPrice" min="0" />
+      </label>
+
+      <label>
+        Max Price:
+        <input type="number" [(ngModel)]="maxPrice" name="maxPrice" min="0" />
+      </label>
+
+      <label>
+        Category:
+        <select [(ngModel)]="selectedCategoryId" name="categoryId">
+          <option value="">-- All Categories --</option>
+          <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </label>
+
+      <label>
+        Sport:
+        <select [(ngModel)]="selectedSportId" name="sportId">
+          <option value="">-- All Sports --</option>
+          <option *ngFor="let s of sports" [value]="s.id">{{ s.name }}</option>
+        </select>
+      </label>
+
+      <label>
+        Condition:
+        <select [(ngModel)]="selectedCondition" name="condition">
+          <option value="">-- Any --</option>
+          <option *ngFor="let cond of conditions" [value]="cond">{{ cond }}</option>
+        </select>
+      </label>
+
+      <label>
+        Status:
+        <select [(ngModel)]="selectedStatus" name="status">
+          <option value="">-- Any --</option>
+          <option *ngFor="let stat of statuses" [value]="stat">{{ stat }}</option>
+        </select>
+      </label>
+
+      <button type="submit">Filter</button>
+      <button type="button" (click)="clearFilters()">Clear</button>
+    </form>
+  </section>
+
+
+  <div *ngIf="!loading && totalProducts > 0" class="product-grid">
+    <product-card *ngFor="let p of products ?? []" [product]="p"></product-card>
+  </div>
+
+  <div *ngIf="!loading && totalProducts === 0">
+    No products found.
+  </div>
+
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button (click)="prevPage()" [disabled]="currentPage === 0">‹ Prev</button>
+
+    <ng-container *ngFor="let page of paginationButtons">
+      <button
+        *ngIf="page !== '...'; else dots"
+        (click)="goToPage(Number(page) - 1)"
+        [class.active]="currentPage === (Number(page) - 1)">
+        {{ page }}
+      </button>
+      <ng-template #dots>
+        <button class="dots" disabled>…</button>
+      </ng-template>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">Next ›</button>
+  </div>
+</section>

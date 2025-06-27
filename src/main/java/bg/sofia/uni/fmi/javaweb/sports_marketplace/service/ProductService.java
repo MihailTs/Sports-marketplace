@@ -1,0 +1,140 @@
+package bg.sofia.uni.fmi.javaweb.sports_marketplace.service;
+
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductCreateDto;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductDto;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductSummaryDto;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.dto.product.ProductUpdateDto;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Category;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Product;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.Sport;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.models.User;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.CategoryRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.ProductRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.SportRepository;
+import bg.sofia.uni.fmi.javaweb.sports_marketplace.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ProductService {
+
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final SportRepository sportRepository;
+
+    public ProductDto getProductById(UUID id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        return toFetchDto(product);
+    }
+
+    public List<ProductSummaryDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(ProductSummaryDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductSummaryDto> getProductsByStatus(String status) {
+        return productRepository.findByStatus(status).stream()
+                .map(ProductSummaryDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public UUID createProduct(ProductCreateDto dto) {
+        User seller = userRepository.findById(dto.getSellerId())
+                .orElseThrow(() -> new EntityNotFoundException("Seller not found"));
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        Sport sport = sportRepository.findById(dto.getSportId())
+                .orElseThrow(() -> new EntityNotFoundException("Sport not found"));
+
+        Product product = Product.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .seller(seller)
+                .category(category)
+                .condition(dto.getCondition())
+                .price(dto.getPrice())
+                .sport(sport)
+                .status(dto.getStatus())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        productRepository.save(product);
+
+        return product.getId();
+    }
+
+    public void updateProduct(UUID id, ProductUpdateDto dto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setCategory(category);
+        product.setCondition(dto.getCondition());
+        product.setPrice(dto.getPrice());
+        product.setStatus(dto.getStatus());
+        product.setUpdatedAt(LocalDateTime.now());
+
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(UUID id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found");
+        }
+        productRepository.deleteById(id);
+    }
+
+    private ProductDto toFetchDto(Product product) {
+        ProductDto dto = new ProductDto();
+        dto.setSellerId(product.getSeller().getId());
+        dto.setSellerName(
+                product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setSellerId(product.getSeller().getId());
+        dto.setCategoryId(product.getCategory().getId());
+        dto.setCondition(product.getCondition());
+        dto.setPrice(product.getPrice());
+        dto.setStatus(product.getStatus());
+        dto.setCreatedAt(product.getCreatedAt());
+        dto.setUpdatedAt(product.getUpdatedAt());
+        return dto;
+    }
+
+    public Page<ProductSummaryDto> filterProducts(
+            Double minPrice,
+            Double maxPrice,
+            UUID categoryId,
+            UUID sportId,
+            String condition,
+            String status,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.filterProducts(minPrice, maxPrice, categoryId, sportId, condition, status, pageable)
+                .map(ProductSummaryDto::fromEntity);
+    }
+
+}
