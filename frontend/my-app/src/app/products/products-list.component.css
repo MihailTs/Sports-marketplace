@@ -190,7 +190,7 @@ input:checked + .slider::before {
 select {
   padding: 0.5rem 0.8rem;
   font-size: 1rem;
-  border: 1.5px solid #cbd5e1; /* lighter border */
+  border: 1.5px solid #cbd5e1;
   border-radius: 8px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
   background-color: #f9fafb;

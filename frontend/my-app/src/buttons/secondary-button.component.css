@@ -1,8 +1,8 @@
 .secondary-btn {
   width: 100%;
   background-color: #fffefe;
-  color: #1f2937; /* gray-800 */
-  border: 2px solid #babec3; /* gray-300 */
+  color: #1f2937;
+  border: 2px solid #babec3;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   font-weight: 600;
@@ -11,7 +11,7 @@
 }
 
 .secondary-btn:hover {
-  background-color: #b7b8b9; /* gray-100 */
+  background-color: #b7b8b9;
 }
 
 a, button {
