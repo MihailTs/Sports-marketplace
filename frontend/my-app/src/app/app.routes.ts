@@ -1,17 +1,16 @@
 import {AuthGuard} from '../authGuard';
 import {ForumsPageComponent} from './forums/forums-page.component';
 import {SingleForumComponent} from './forums/single-forum.component';
-<<<<<<< HEAD
 import { ChatComponent } from '../chat/chat.component';
 import { UserProfileComponent } from '../user/user.profile.component';
-=======
+import { EventListComponent } from '../event/event-list.component';
+import { EventDetailsComponent } from '../event/event-details.component';
 import {ProductsListComponent} from './products/products-list.component';
 import {AddProductComponent} from './products/add-product.component';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {RegisterComponent} from './register/register.component';
 import {Routes} from '@angular/router';
->>>>>>> main
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,5 +36,8 @@ export const routes: Routes = [
   ,
   { path: 'chat/:id', component: ChatComponent }
   ,
-  { path: 'users/:id', component: UserProfileComponent }
+  { path: 'users/:id', component: UserProfileComponent },
+  { path: 'events', component: EventListComponent },
+  { path: 'events/:id', component: EventDetailsComponent },
+
 ];

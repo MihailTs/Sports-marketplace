@@ -96,7 +96,27 @@ export class RegisterComponent {
 
     const formData = this.registerForm.value;
 
-    this.authService.register(formData).subscribe({
+    const formattedData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      confirmPassword:formData.confirmPassword,
+      birthdate: formData.birthdate,
+      phone: formData.phoneNumber,
+      gender: formData.gender,
+      pictureUrl: formData.pictureUrl,
+      role: formData.role,
+      address: {
+        country: formData.country,
+        city: formData.city,
+        state: formData.state,
+        street: formData.street,
+        zipCode: formData.zipCode
+      }
+    };
+
+    this.authService.register(formattedData).subscribe({
       next: (token: string) => {
         localStorage.setItem('jwtToken', token);
         this.router.navigate(['/']);

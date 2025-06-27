@@ -24,5 +24,5 @@ public record UserRegistrationDto(
         Role role,
         String gender,
         String phoneNumber,
-        AddressCreateDto addressCreateDto
+        AddressCreateDto address
 ) {}

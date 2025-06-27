@@ -95,7 +95,7 @@ public class UserController {
                 userRegDto.imageUrl(),
                 userRegDto.gender(),
                 userRegDto.phoneNumber(),
-                userRegDto.addressCreateDto(),
+                userRegDto.address(),
                 userRegDto.birthdate()
         );
         return ResponseEntity.ok(Map.of("token", jwtUtil.generateToken(user)));

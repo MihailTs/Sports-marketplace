@@ -12,7 +12,10 @@ export class AuthService {
     return this.http.post<AuthResponse>(`/api/users/auth/login`, credentials);
   }
 
-  register(userData: FormData): Observable<string> {
-    return this.http.post(`/api/users/auth/register`, userData, { responseType: 'text' });
+  register(userData: any): Observable<any> {
+    return this.http.post('/api/users/auth/register', userData, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
+  
 }

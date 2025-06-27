@@ -97,20 +97,6 @@
           {{ getFieldError('phone') }}
         </div>
       </div>
-
-      <div class="input-group">
-        <text-box
-          label="Address"
-          id="address"
-          formControlName="address"
-          type="text"
-          class="text-input"
-          [class.error]="getFieldError('address')" />
-        <div *ngIf="getFieldError('address')" class="field-error">
-          {{ getFieldError('address') }}
-        </div>
-      </div>
-
       
       <div class="input-group">
         <text-box

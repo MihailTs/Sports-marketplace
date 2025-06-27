@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event } from './event.model'; // Adjust path accordingly
-import { EventDto } from './event.dto'; // Adjust path accordingly
+import { EventDto } from './event-dto'; // Adjust path accordingly
 
 @Injectable({
   providedIn: 'root',
